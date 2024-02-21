@@ -1,4 +1,4 @@
-package com.example.pterodactyl_app
+package org.iesch.ecatalanm.pterodactyl_app
 
 import io.flutter.embedding.android.FlutterActivity
 
