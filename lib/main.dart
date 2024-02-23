@@ -3,14 +3,60 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:pterodactyl_app/presentation/screens/console.dart';
+import 'package:pterodactyl_app/models/server.dart';
+import 'package:pterodactyl_app/presentation/screens/addserver.dart';
+import 'package:pterodactyl_app/presentation/screens/mainmenu.dart';
+import 'package:pterodactyl_app/presentation/screens/server/console.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:http/http.dart' as http;
+import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'dart:async';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
-void main() {
+void main() async {
+
+  // Open the database and store the reference.
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  
+
+  final database = openDatabase(
+    join(await getDatabasesPath(), 'servers.db'),
+    onCreate: (db, version) {
+      return db.execute(
+        'CREATE TABLE servers(id INTEGER PRIMARY KEY, socket TEXT, panel TEXT, api TEXT)',
+      );
+    },
+    version: 1,
+  );
+
+  // Create a server
+  Future<void> insertServer(Server server) async {
+    final Database db = await database;
+   
+    await db.insert(
+      'servers',
+      server.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  
+
+
+  
+
+
+
+
+
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
@@ -21,6 +67,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
       theme: ThemeData(
@@ -41,77 +88,21 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
 
         // enable dark mode
+        
 
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue)
             .copyWith(secondary: Colors.green),
 
         useMaterial3: true,
+
       ),
-      home: Console(),
+      routes: 
+      {
+        '/': (context) => const MainMenu(),
+        '/addserver': (context) => const AddServer(),
+      },
+      
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  late IOWebSocketChannel _channel;
-  final TextEditingController _controller = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
-  final List<String> messages = [];
-
-  void sendCommand() {
-    _channel.sink.add(jsonEncode({
-      'event': 'send command',
-      'args': [_controller.text],
-    }));
-    _controller.clear();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('WebSocket Client'),
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-              reverse: false,
-              controller: _scrollController,
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(messages[index]),
-                );
-              },
-            ),
-          ),
-          TextField(
-            controller: _controller,
-            onSubmitted: (value) {
-              sendCommand();
-            },
-            decoration: InputDecoration(
-              labelText: 'Enter command',
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.send),
-                onPressed: sendCommand,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _channel.sink.close();
-    super.dispose();
-  }
-}

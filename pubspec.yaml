@@ -39,6 +39,8 @@ dependencies:
   http: ^1.2.0
   flutter_hooks: ^0.20.5
   socket_io_client: ^2.0.3+1
+  sqflite: ^2.3.2
+  sqflite_common_ffi: ^2.3.2+1
   
 
 dev_dependencies:

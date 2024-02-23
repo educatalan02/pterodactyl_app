@@ -33,16 +33,15 @@ class _ConsoleState extends State<Console> {
     _channel.stream.listen((event) {
       Map data = jsonDecode(event);
       if (data["event"] == "console output") {
-        _scrollController.jumpTo(
-          _scrollController.position.maxScrollExtent,
-        );
+        
         setState(() {
           messages.add(data["args"][0].toString());
         });
-
-        //if (messages.length > 100) messages.removeRange(0, 99);
-
-        // Scroll to the end of the list after a new message is added
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _scrollController.jumpTo(
+        _scrollController.position.maxScrollExtent,
+      );
+    });
       }
     });
   }
@@ -57,9 +56,7 @@ class _ConsoleState extends State<Console> {
       'event': 'send command',
       'args': [_controller.text],
     }));
-    _scrollController.jumpTo(
-      _scrollController.position.maxScrollExtent,
-    );
+    
     _controller.clear();
   }
 
@@ -120,9 +117,9 @@ class _ConsoleState extends State<Console> {
             _channel.sink.close();
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
-        title: Text("Console",
+        title: const Text("Console",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
       ),
       body: SafeArea(
@@ -140,7 +137,7 @@ class _ConsoleState extends State<Console> {
                       for (var message in messages)
                         Text(
                           removeAnsiCodes(message),
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                     ],
                   ),
@@ -156,8 +153,8 @@ class _ConsoleState extends State<Console> {
                 );
                 _controller.clear();
               },
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
                 border: InputBorder.none,
                 filled: true,
                 fillColor: Colors.black26,
