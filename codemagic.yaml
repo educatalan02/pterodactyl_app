@@ -2,18 +2,32 @@ workflows:
   flutter_build:
     name: Flutter Build
     environment:
-      flutter: stable
+      vars:
+        FLUTTER_CHANNEL: stable
     scripts:
-      - name: Install dependencies
-        script: flutter pub get
+      - name: Install Flutter
+        script: flutter pub global activate flutter
+      - name: Flutter clean
+        script: flutter clean
+      - name: Flutter analyze
+        script: flutter analyze
+      - name: Flutter format
+        script: flutter format --set-exit-if-changed .
+      - name: Flutter test
+        script: flutter test
       - name: Build APK
-        script: flutter build apk --release --output=$FCI_ARTIFACTS_DIR/app-release.apk
+        script: flutter build apk
       - name: Build iOS
         script: flutter build ios --release --no-codesign
-      - name: Archive iOS
-        script: flutter build ios --release --no-codesign --build-number=$BUILD_NUMBER
-      - name: Create iOS artifact
-        script: mv build/ios/iphoneos/Runner.app $FCI_ARTIFACTS_DIR/Runner.app
+        artifact_paths:
+          - build/ios/iphoneos/Runner.app
+
+app:
+  android:
+    build_mode: release
     artifacts:
-      - app-release.apk
-      - Runner.app
+      - build/app/outputs/apk/release/app-release.apk
+  ios:
+    build_mode: release
+    artifacts:
+      - build/ios/ipa/Runner.ipa
