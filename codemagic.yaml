@@ -1,22 +1,14 @@
 workflows:
-  flutter_build:
-    name: Flutter Build
+  default-workflow:
+    name: Default workflow
+    instance_type: mac_mini_m1
+    max_build_duration: 60
     environment:
-      vars:
-        FLUTTER_CHANNEL: stable
+      flutter: stable
+      xcode: latest
+      cocoapods: default
     scripts:
-      - name: Install Flutter
-        script: flutter pub get
-      - name: Flutter clean
-        script: flutter clean
-      - name: Flutter analyze
-        script: flutter analyze
-      - name: Flutter format
-        script: flutter format --set-exit-if-changed .
-      - name: Build APK
-        script: flutter build apk
-      - name: Build iOS
-        script: flutter build ios --release --no-codesign
+      # Add scripts here
     artifacts:
-      - build/app/outputs/apk/release/app-release.apk
-      - build/ios/iphoneos/Runner.app
+      - build/**/outputs/**/*.apk
+      - build/ios/ipa/*.ipa
