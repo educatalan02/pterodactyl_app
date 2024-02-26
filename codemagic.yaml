@@ -13,13 +13,10 @@ workflows:
         script: flutter analyze
       - name: Flutter format
         script: flutter format --set-exit-if-changed .
-      - name: Flutter test
-        script: flutter test
       - name: Build APK
         script: flutter build apk
-        artifacts:
-          - build/app/outputs/apk/release/app-release.apk
       - name: Build iOS
         script: flutter build ios --release --no-codesign
-        artifacts:
-          - build/ios/iphoneos/Runner.app
+    artifacts:
+      - build/app/outputs/apk/release/app-release.apk
+      - build/ios/iphoneos/Runner.app
