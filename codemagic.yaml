@@ -8,7 +8,9 @@ workflows:
       xcode: latest
       cocoapods: default
     scripts:
-      # Add scripts here
+      - flutter pub get
+      - flutter build apk --release
+      - flutter build ios --release --no-codesign
     artifacts:
       - build/app/outputs/apk/*.apk
       - build/app/outputs/ipa/*.ipa
