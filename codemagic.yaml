@@ -17,17 +17,9 @@ workflows:
         script: flutter test
       - name: Build APK
         script: flutter build apk
+        artifacts:
+          - build/app/outputs/apk/release/app-release.apk
       - name: Build iOS
         script: flutter build ios --release --no-codesign
-        artifact_paths:
+        artifacts:
           - build/ios/iphoneos/Runner.app
-
-app:
-  android:
-    build_mode: release
-    artifacts:
-      - build/app/outputs/apk/release/app-release.apk
-  ios:
-    build_mode: release
-    artifacts:
-      - build/ios/ipa/Runner.ipa
