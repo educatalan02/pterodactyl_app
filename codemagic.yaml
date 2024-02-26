@@ -10,8 +10,8 @@ workflows:
     scripts:
       # Add scripts here
     artifacts:
-      - build/**/outputs/**/*.apk
-      - build/ios/ipa/*.ipa
+      - build/app/outputs/apk/*.apk
+      - build/app/outputs/ipa/*.ipa
     publishing:
       email:
         recipients:
