@@ -12,8 +12,8 @@ workflows:
       - flutter build apk --release
       - flutter build ios --release --no-codesign
     artifacts:
-      - build/app/outputs/apk/*.apk
-      - build/app/outputs/ipa/*.ipa
+      - build/app/outputs/apk/release/app-release.apk
+      - build/ios/iphoneos/Runner.app
     publishing:
       email:
         recipients:
