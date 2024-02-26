@@ -18,18 +18,18 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 void main() async {
-
   // Open the database and store the reference.
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  
+  // delete the database
+  //await deleteDatabase(join(await getDatabasesPath(), 'servers.db'));
 
   final database = openDatabase(
     join(await getDatabasesPath(), 'servers.db'),
     onCreate: (db, version) {
       return db.execute(
-        'CREATE TABLE servers(id INTEGER PRIMARY KEY, socket TEXT, panel TEXT, api TEXT)',
+        'CREATE TABLE servers(socket TEXT, panel TEXT, apiKey TEXT, serverId TEXT, name TEXT)',
       );
     },
     version: 1,
@@ -38,7 +38,7 @@ void main() async {
   // Create a server
   Future<void> insertServer(Server server) async {
     final Database db = await database;
-   
+
     await db.insert(
       'servers',
       server.toMap(),
@@ -46,17 +46,7 @@ void main() async {
     );
   }
 
-  
-
-
-  
-
-
-
-
-
   runApp(const MyApp());
-
 }
 
 class MyApp extends StatelessWidget {
@@ -88,21 +78,16 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
 
         // enable dark mode
-        
 
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue)
             .copyWith(secondary: Colors.green),
 
         useMaterial3: true,
-
       ),
-      routes: 
-      {
+      routes: {
         '/': (context) => const MainMenu(),
-        '/addserver': (context) => const AddServer(),
+        '/addserver': (context) => AddServer(),
       },
-      
     );
   }
 }
-

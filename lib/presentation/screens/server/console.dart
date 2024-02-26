@@ -1,13 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:pterodactyl_app/models/server.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:http/http.dart' as http;
 
 class Console extends StatefulWidget {
-  Console({super.key});
+  Console({super.key, required this.server});
   String socket = '';
   List<String> messages = [];
+
+  late Server server;
 
   @override
   State<Console> createState() => _ConsoleState();
@@ -33,15 +36,14 @@ class _ConsoleState extends State<Console> {
     _channel.stream.listen((event) {
       Map data = jsonDecode(event);
       if (data["event"] == "console output") {
-        
         setState(() {
           messages.add(data["args"][0].toString());
         });
         WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _scrollController.jumpTo(
-        _scrollController.position.maxScrollExtent,
-      );
-    });
+          _scrollController.jumpTo(
+            _scrollController.position.maxScrollExtent,
+          );
+        });
       }
     });
   }
@@ -56,21 +58,21 @@ class _ConsoleState extends State<Console> {
       'event': 'send command',
       'args': [_controller.text],
     }));
-    
+
     _controller.clear();
   }
 
-  void fetchServerDetails() async {
-    const String apiKey = 'ptlc_weVB5KEdhOIFyqj5Gq01olJLlhOSRqQHq78x570bPFN';
-    const String serverId = '1a013dcb';
+  void fetchServerDetails(Server server) async {
+    //const String apiKey = 'ptlc_weVB5KEdhOIFyqj5Gq01olJLlhOSRqQHq78x570bPFN';
+    //const String serverId = '1a013dcb';
 
     final response = await http.get(
       Uri.parse(
-          'https://panel.redstoneplugins.com/api/client/servers/$serverId/websocket'),
+          '${server.panelUrl}/api/client/servers/${server.serverId}/websocket'),
       headers: <String, String>{
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $apiKey',
+        'Authorization': 'Bearer ${server.apiKey}',
       },
     );
 
@@ -101,7 +103,7 @@ class _ConsoleState extends State<Console> {
 
   @override
   void initState() {
-    fetchServerDetails();
+    fetchServerDetails(widget.server);
     super.initState();
   }
 
@@ -109,19 +111,20 @@ class _ConsoleState extends State<Console> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          color: Colors.white,
-          onPressed: () {
-            _channel.sink.close();
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-        ),
-        title: const Text("Console",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
-      ),
+          elevation: 0.0,
+          backgroundColor: Colors.black,
+          leading: IconButton(
+            color: Colors.white,
+            onPressed: () {
+              _channel.sink.close();
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+          ),
+          title: const Text(
+            "Console",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+          )),
       body: SafeArea(
         child: Column(
           children: [
@@ -135,9 +138,12 @@ class _ConsoleState extends State<Console> {
                         .start, // Alinea el texto a la izquierda
                     children: [
                       for (var message in messages)
-                        Text(
-                          removeAnsiCodes(message),
-                          style: const TextStyle(color: Colors.white),
+                        Container(
+                          width: double.infinity,
+                          child: Text(
+                            removeAnsiCodes(message),
+                            style: const TextStyle(color: Colors.white),
+                          ),
                         ),
                     ],
                   ),

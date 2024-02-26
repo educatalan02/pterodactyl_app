@@ -1,36 +1,28 @@
-
-
 class Server {
+  late String socketUrl = '';
 
-late int id;
+  late String panelUrl;
 
-late String socketUrl;
+  late String apiKey;
+  late String serverId;
 
-late String urlPanel;
+  late String name = '';
 
-late String apiKey;
+  Server({
+    required this.socketUrl,
+    required this.panelUrl,
+    required this.apiKey,
+    required this.name,
+    required this.serverId,
+  });
 
-
-Server({required this.socketUrl, required this.urlPanel, required this.apiKey});
-
-
-
-
-
-
-
-Map<String, dynamic> toMap() {
-  return {
-    'id': id,
-    'socket': socketUrl,
-    'panel': urlPanel,
-    'api': apiKey,
-  };
-
-
-
-
+  Map<String, dynamic> toMap() {
+    return {
+      'socket': socketUrl,
+      'panel': panelUrl,
+      'apiKey': apiKey,
+      'name': name,
+      'serverId': serverId,
+    };
+  }
 }
-}
-
-
