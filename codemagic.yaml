@@ -12,3 +12,7 @@ workflows:
     artifacts:
       - build/**/outputs/**/*.apk
       - build/ios/ipa/*.ipa
+    publishing:
+    email:
+      recipients:
+        - educatalan02@gmail.com
