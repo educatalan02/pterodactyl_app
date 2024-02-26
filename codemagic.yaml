@@ -1,0 +1,21 @@
+workflows:
+  flutter_build:
+    name: Flutter Build
+    environment:
+      flutter: stable
+    scripts:
+      - name: Install dependencies
+        script: flutter pub get
+      - name: Build APK
+        script: flutter build apk --release
+      - name: Build iOS
+        script: flutter build ios --release --no-codesign
+      - name: Archive iOS
+        script: flutter build ios --release --no-codesign --build-number=$BUILD_NUMBER
+      - name: Create APK artifact
+        script: mv build/app/outputs/apk/release/app-release.apk $FCI_ARTIFACTS_DIR/app-release.apk
+      - name: Create iOS artifact
+        script: mv build/ios/iphoneos/Runner.app $FCI_ARTIFACTS_DIR/Runner.app
+    artifacts:
+      - app-release.apk
+      - Runner.app
