@@ -6,7 +6,7 @@ workflows:
         FLUTTER_CHANNEL: stable
     scripts:
       - name: Install Flutter
-        script: flutter pub global activate flutter
+        script: flutter pub get
       - name: Flutter clean
         script: flutter clean
       - name: Flutter analyze
