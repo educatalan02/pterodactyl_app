@@ -13,6 +13,6 @@ workflows:
       - build/**/outputs/**/*.apk
       - build/ios/ipa/*.ipa
     publishing:
-    email:
-      recipients:
-        - educatalan02@gmail.com
+      email:
+        recipients:
+          - educatalan02@gmail.com
