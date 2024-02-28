@@ -130,24 +130,21 @@ class _ConsoleState extends State<Console> {
         child: Column(
           children: [
             Expanded(
-              child: Container(
-                color: Colors.black,
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment
-                        .start, // Alinea el texto a la izquierda
-                    children: [
-                      for (var message in messages)
-                        Container(
-                          width: double.infinity,
-                          child: Text(
-                            removeAnsiCodes(message),
-                            style: const TextStyle(color: Colors.white),
-                          ),
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment
+                      .start, // Alinea el texto a la izquierda
+                  children: [
+                    for (var message in messages)
+                      SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          removeAnsiCodes(message),
+                          style: const TextStyle(color: Colors.white),
                         ),
-                    ],
-                  ),
+                      ),
+                  ],
                 ),
               ),
             ),
@@ -164,7 +161,7 @@ class _ConsoleState extends State<Console> {
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 filled: true,
-                fillColor: Colors.black26,
+                fillColor: Colors.black45,
                 hintStyle: TextStyle(color: Colors.white),
                 prefixStyle: TextStyle(color: Colors.white),
                 hintText: "Type a command here...",
