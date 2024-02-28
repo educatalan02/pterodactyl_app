@@ -35,17 +35,6 @@ void main() async {
     version: 1,
   );
 
-  // Create a server
-  Future<void> insertServer(Server server) async {
-    final Database db = await database;
-
-    await db.insert(
-      'servers',
-      server.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
   runApp(const MyApp());
 }
 

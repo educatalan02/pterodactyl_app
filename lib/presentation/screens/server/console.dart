@@ -5,6 +5,7 @@ import 'package:pterodactyl_app/models/server.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:http/http.dart' as http;
 
+// ignore: must_be_immutable
 class Console extends StatefulWidget {
   Console({super.key, required this.server});
   String socket = '';
@@ -39,7 +40,7 @@ class _ConsoleState extends State<Console> {
         setState(() {
           messages.add(data["args"][0].toString());
         });
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           _scrollController.jumpTo(
             _scrollController.position.maxScrollExtent,
           );
@@ -79,7 +80,7 @@ class _ConsoleState extends State<Console> {
     switch (response.statusCode) {
       case 200:
         // Si el servidor devuelve una respuesta OK, parsea el JSON.
-        print(jsonDecode(response.body));
+        //print(jsonDecode(response.body));
         final data = jsonDecode(response.body);
 
         connect(data["data"]["socket"], data["data"]["token"]);
