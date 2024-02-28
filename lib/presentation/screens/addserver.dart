@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:pterodactyl_app/models/server.dart';
@@ -129,9 +128,12 @@ class AddServer extends StatelessWidget {
                 final server = await fetchServerDetails(_panelController.text,
                     _apiKeyController.text, _serverIdController.text);
 
-                insertServer(server);
+                await insertServer(server);
 
-                Navigator.pop(context);
+                
+                await Future.delayed(Duration.zero, () {
+                  Navigator.maybePop(context);
+                });
               },
               child: const Text('Save'),
             ),
