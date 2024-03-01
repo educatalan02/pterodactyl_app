@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:pterodactyl_app/models/server.dart';
+import 'package:pterodactyl_app/entities/model/server.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,21 +10,21 @@ import 'package:http/http.dart' as http;
 class Console extends StatefulWidget {
   Console({super.key, required this.server});
   String socket = '';
-  List<String> messages = [];
 
   late Server server;
 
   @override
   State<Console> createState() => _ConsoleState();
+  
 }
 
 class _ConsoleState extends State<Console> {
+  
   late IOWebSocketChannel _channel;
   List<String> messages = [];
 
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-
   void connect(String url, String token) {
     _channel = IOWebSocketChannel.connect(Uri.parse(url));
 
@@ -40,11 +41,15 @@ class _ConsoleState extends State<Console> {
         setState(() {
           messages.add(data["args"][0].toString());
         });
+        if(messages.length > 100) {
+          messages.removeRange(0, 99);
+        }
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _scrollController.jumpTo(
             _scrollController.position.maxScrollExtent,
           );
         });
+        
       }
     });
   }
@@ -64,9 +69,6 @@ class _ConsoleState extends State<Console> {
   }
 
   void fetchServerDetails(Server server) async {
-    //const String apiKey = 'ptlc_weVB5KEdhOIFyqj5Gq01olJLlhOSRqQHq78x570bPFN';
-    //const String serverId = '1a013dcb';
-
     final response = await http.get(
       Uri.parse(
           '${server.panelUrl}/api/client/servers/${server.serverId}/websocket'),
@@ -79,12 +81,8 @@ class _ConsoleState extends State<Console> {
 
     switch (response.statusCode) {
       case 200:
-        // Si el servidor devuelve una respuesta OK, parsea el JSON.
-        //print(jsonDecode(response.body));
         final data = jsonDecode(response.body);
-
         connect(data["data"]["socket"], data["data"]["token"]);
-
         break;
       case 401:
         throw Exception('Unauthorized request. Check your API key.');
@@ -98,18 +96,25 @@ class _ConsoleState extends State<Console> {
 
   @override
   void dispose() {
-    _channel.sink.close();
     super.dispose();
+
+    _channel.sink.close();
+    
   }
 
   @override
   void initState() {
-    fetchServerDetails(widget.server);
     super.initState();
+    fetchServerDetails(widget.server);
+    
+
+    
+  
   }
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
           elevation: 0.0,
@@ -165,7 +170,6 @@ class _ConsoleState extends State<Console> {
                 hintStyle: TextStyle(color: Colors.white),
                 prefixStyle: TextStyle(color: Colors.white),
                 hintText: "Type a command here...",
-                prefixText: 'container:~/\$ ',
               ),
               controller: _controller,
             ),

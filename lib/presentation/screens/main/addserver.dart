@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:pterodactyl_app/models/server.dart';
+import 'package:pterodactyl_app/entities/model/server.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -24,8 +24,6 @@ class AddServer extends StatelessWidget {
 
   Future<String> fetchSocketUrl(
       String panelUrl, String apiKey, String serverId) async {
-    // fetch the socket url from the panel
-    // and return the socket url
     final response = await http.get(
       Uri.parse('$panelUrl/api/client/servers/$serverId/websocket'),
       headers: <String, String>{
@@ -37,10 +35,7 @@ class AddServer extends StatelessWidget {
 
     switch (response.statusCode) {
       case 200:
-        // Si el servidor devuelve una respuesta OK, parsea el JSON.
-        print(jsonDecode(response.body));
         final data = jsonDecode(response.body);
-
         return data["data"]["socket"];
       case 401:
         throw Exception('Unauthorized request. Check your API key.');
@@ -54,9 +49,6 @@ class AddServer extends StatelessWidget {
 
   Future<Server> fetchServerDetails(
       String panelUrl, String apiKey, String serverId) async {
-    // fetch the server details from the panel
-    // and return a server object
-
     var response = await http.get(
       Uri.parse('$panelUrl/api/client/servers/$serverId'),
       headers: <String, String>{
@@ -83,11 +75,8 @@ class AddServer extends StatelessWidget {
     return server;
   }
 
-  // controller for the text field
   final TextEditingController _panelController = TextEditingController();
-
   final TextEditingController _apiKeyController = TextEditingController();
-
   final TextEditingController _serverIdController = TextEditingController();
 
   @override
@@ -96,7 +85,8 @@ class AddServer extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Add Server'),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -105,32 +95,39 @@ class AddServer extends StatelessWidget {
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Panel URL',
+                labelStyle: TextStyle(color: Colors.blue),
               ),
             ),
+            const SizedBox(height: 10),
             TextField(
               controller: _apiKeyController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'API Key',
+                labelStyle: TextStyle(color: Colors.blue),
               ),
             ),
+            const SizedBox(height: 10),
             TextField(
               controller: _serverIdController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Server ID',
+                labelStyle: TextStyle(color: Colors.blue),
               ),
             ),
+            const SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue, // background
+                foregroundColor: Colors.white, // foreground
+              ),
               onPressed: () async {
-                // save the server details
-
                 final server = await fetchServerDetails(_panelController.text,
                     _apiKeyController.text, _serverIdController.text);
 
                 await insertServer(server);
 
-                
                 await Future.delayed(Duration.zero, () {
                   Navigator.maybePop(context);
                 });

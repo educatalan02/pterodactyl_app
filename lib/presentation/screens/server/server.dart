@@ -3,16 +3,20 @@ import 'dart:convert';
 import 'package:fl_chart/fl_chart.dart';
 
 import 'package:flutter/material.dart';
-import 'package:pterodactyl_app/models/server.dart';
-import 'package:pterodactyl_app/models/usage_data.dart';
+import 'package:provider/provider.dart';
+import 'package:pterodactyl_app/entities/model/server.dart';
+import 'package:pterodactyl_app/entities/model/usage_data.dart';
 import 'package:http/http.dart' as http;
+import 'package:pterodactyl_app/presentation/screens/providers/server_settings_provider.dart';
 import 'package:pterodactyl_app/presentation/screens/server/console.dart';
+import 'package:pterodactyl_app/presentation/screens/server/server_settings.dart';
+import 'package:shimmer/shimmer.dart';
 
 // ignore: must_be_immutable
 class ServerPanel extends StatefulWidget {
-  ServerPanel({super.key, required this.server});
+  const ServerPanel({super.key, required this.server});
 
-  late Server server;
+  final Server server;
 
   @override
   State<ServerPanel> createState() => _ServerPanelState();
@@ -27,15 +31,27 @@ class _ServerPanelState extends State<ServerPanel> {
 late bool serverIsSuspended = false;
 
   late final bool animate;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text(widget.server.name),
-    backgroundColor: Colors.blue[800],
+
+
+    
+      final serverProvider = Provider.of<ServerSettingsProvider>(context, listen: true);
+      serverProvider.setServer(widget.server);
+      final serverTag = serverProvider.server != null ? serverProvider.server!.optionalTag : ' ';
+      
+    
+    
+    return Scaffold(appBar: AppBar(title: Text(serverProvider.server!.name.toString()), bottom: PreferredSize(
+      preferredSize: const Size.fromHeight(4.0),
+      child: Text(serverTag)
+    ),
     
     actions: [
       if(serverIsSuspended)
       IconButton(
-        icon: const Icon(Icons.power_settings_new_outlined, color: Colors.green),
+        icon: const Icon(Icons.power_settings_new_outlined, color: Colors.red),
         onPressed: () async {
 
           final response = await http.post(
@@ -56,14 +72,12 @@ late bool serverIsSuspended = false;
               serverIsSuspended = false;
             });
           }
-          //Navigator.push(context, MaterialPageRoute(builder: (context) => Console(server: widget.server)));
-        
         }
       ),
 
       if(!serverIsSuspended)
       IconButton(
-        icon: const Icon(Icons.power_settings_new, color: Colors.red),
+        icon: const Icon(Icons.power_settings_new, color: Colors.green),
         onPressed: () async {
 
           final response = await http.post(
@@ -77,8 +91,6 @@ late bool serverIsSuspended = false;
             body: jsonEncode(<String, String>{
               'signal': 'stop',
             }),
-
-
           );
 
           if(response.statusCode == 204){
@@ -91,7 +103,7 @@ late bool serverIsSuspended = false;
 
             
           }
-          //Navigator.push(context, MaterialPageRoute(builder: (context) => Console(server: widget.server)));
+         
         },
       ),
 
@@ -148,9 +160,7 @@ late bool serverIsSuspended = false;
               child: Column(mainAxisAlignment: MainAxisAlignment.center,
               children: [const Icon(Icons.timer),
               const Text("Uptime", style: TextStyle(fontWeight: FontWeight.bold)),
-
-              // uptime is in miliseconds, so we divide by 1000 to get seconds, then by 60 to get minutes, then by 60 to get hours, then by 24 to get days
-              Text('${getUptime(snapshot.data!.uptime)}'),
+              Text(getUptime(snapshot.data!.uptime)),
               ],
               ),
             ),
@@ -161,7 +171,47 @@ late bool serverIsSuspended = false;
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
-          return Center(child: CircularProgressIndicator(backgroundColor: Colors.blue[800],)
+          return Shimmer. fromColors(
+            baseColor: Colors.grey[800]!,
+            highlightColor: Colors.grey[700]!,
+            child: GridView.count(crossAxisCount:4,
+          children: [
+            Card(
+              color: Colors.grey[850],
+              child: const Padding(padding:  EdgeInsets.all(8.0),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center,
+              
+              ),
+            ),
+            ),
+            Card(
+              color: Colors.grey[850],
+              child: const Padding(padding:  EdgeInsets.all(8.0),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center,
+              
+              ),
+            ),
+            ),
+            Card(
+              color: Colors.grey[850],
+              child: const Padding(padding:  EdgeInsets.all(8.0),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center,
+              
+              ),
+            ),
+            ),
+
+            Card(
+              color: Colors.grey[850],
+              child: const Padding(padding:  EdgeInsets.all(8.0),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center,
+              
+              ),
+            ),
+            ),
+          ],
+          
+          ),
           );
         }
       },
@@ -190,6 +240,9 @@ late bool serverIsSuspended = false;
         if(value == 0){
           Navigator.push(context, MaterialPageRoute(builder: (context) => Console(server: widget.server)));
         }
+        else if(value == 1){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ServerSettings(server: widget.server)));
+        }
       
       },
       selectedItemColor: Colors.blue[800],
@@ -213,10 +266,18 @@ late bool serverIsSuspended = false;
 
   @override
   void initState() {
+    
     super.initState();
+
+    
+
     fetchServerResources();
+
+    
     
   }
+
+
 
   Future<UsageData> fetchServerResources() async {
 
@@ -256,7 +317,7 @@ double cpuUsage = 0.0;
         diskUsage = data["attributes"]["resources"]["disk_bytes"];
 
         uptime = data["attributes"]["resources"]["uptime"];
-        print(data["attributes"]["resources"]);
+      
 
         currentState = data["attributes"]["current_state"];
 

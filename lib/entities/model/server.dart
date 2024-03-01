@@ -7,6 +7,8 @@ class Server {
   late String serverId;
 
   late String name = '';
+  late String optionalTag = '';
+  
 
   Server({
     required this.socketUrl,
@@ -23,6 +25,7 @@ class Server {
       'apiKey': apiKey,
       'name': name,
       'serverId': serverId,
+      'optionalTag': optionalTag,
     };
   }
 }

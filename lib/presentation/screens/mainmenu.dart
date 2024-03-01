@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pterodactyl_app/models/server.dart';
-import 'package:pterodactyl_app/presentation/screens/server/console.dart';
+import 'package:pterodactyl_app/entities/model/server.dart';
 import 'package:pterodactyl_app/presentation/screens/server/server.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -32,15 +31,12 @@ Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       title: const Text('Pterodactyl App'),
-      titleTextStyle: const TextStyle(color: Colors.white, fontSize: 24.0),
-      backgroundColor: Colors.blue[800],
+      
       actions: [
         IconButton(
           onPressed: () {
             Navigator.pushNamed(context, '/addserver');
           },
-          color: Colors.white,
-          highlightColor: Colors.grey[800],
           icon: const Icon(Icons.add),
         ),
       ],
@@ -56,9 +52,9 @@ Widget build(BuildContext context) {
                 return Card(
                   color: Colors.grey[800],
                   child: ListTile(
-                    leading: Icon(Icons.cloud, color: Colors.white),
-                    title: Text(snapshot.data![index].name, style: TextStyle(color: Colors.white)),
-                    subtitle: Text(snapshot.data![index].panelUrl, style: TextStyle(color: Colors.white)),
+                    leading: const Icon(Icons.cloud, color: Colors.white),
+                    title: Text(snapshot.data![index].name, style: const TextStyle(color: Colors.white)),
+                    subtitle: Text(snapshot.data![index].panelUrl, style: const TextStyle(color: Colors.white)),
                     onTap: () {
                       Navigator.push(
                         context,
