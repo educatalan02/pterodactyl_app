@@ -28,21 +28,18 @@ class _ServerPanelState extends State<ServerPanel> {
 late bool serverIsSuspended = false;
 
   late final bool animate;
+  
 
   @override
   Widget build(BuildContext context) {
 
 
-    
-      final serverProvider = Provider.of<ServerSettingsProvider>(context, listen: true);
-      serverProvider.setServer(widget.server);
-      final serverTag = serverProvider.server != null ? serverProvider.server!.optionalTag : ' ';
-      
+   
     
     
-    return Scaffold(appBar: AppBar(title: Text(serverProvider.server!.name.toString()), bottom: PreferredSize(
-      preferredSize: const Size.fromHeight(4.0),
-      child: Text(serverTag)
+    return Scaffold(appBar: AppBar(title: Text(widget.server.name), bottom: PreferredSize(
+      preferredSize: Size.zero,
+      child: Text(widget.server.optionalTag),
     ),
     
     actions: [
@@ -66,6 +63,8 @@ late bool serverIsSuspended = false;
 
           if(response.statusCode == 204){
             setState(() {
+              // snackbar
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Server is starting...')));
               serverIsSuspended = false;
             });
           }
@@ -95,6 +94,7 @@ late bool serverIsSuspended = false;
 
             setState(() {
               serverIsSuspended = true;
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Server is stopping...')));
             });
 
 

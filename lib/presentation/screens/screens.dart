@@ -1,5 +1,4 @@
 
-export 'package:pterodactyl_app/presentation/screens/main/app_settings.dart';
 
 export 'package:pterodactyl_app/presentation/screens/main/add_server_screen.dart';
 export 'package:pterodactyl_app/presentation/screens/main_menu_screen.dart';

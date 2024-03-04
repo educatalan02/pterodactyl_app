@@ -17,7 +17,7 @@ class AppTheme {
   final int colorSeleccionado;
   final bool isDarkMode;
 
-  AppTheme({required this.colorSeleccionado, this.isDarkMode = false})
+  AppTheme({required this.colorSeleccionado, this.isDarkMode = true})
       : assert(
             colorSeleccionado >= 0, 'El color ha de ser un valor superior a 0'),
         assert(colorSeleccionado <= colorList.length,
@@ -29,9 +29,9 @@ class AppTheme {
         
         appBarTheme: AppBarTheme(
        
-          backgroundColor: isDarkMode ? colorList[1] : colorList[0],
+          backgroundColor: isDarkMode ? colorList[0] : colorList[1],
           titleTextStyle: TextStyle(
-            color: isDarkMode ? colorList[3] : colorList[1],
+            color: isDarkMode ? colorList[1] : colorList[3],
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),

@@ -86,15 +86,11 @@ class ServerSettings extends StatelessWidget {
 
                 await updateServer(server);
 
-                
-                
-                Future.delayed(Duration.zero, (){
-Provider.of<ServerSettingsProvider>(context, listen: false).updateServer(server);
+                Future.delayed(Duration.zero, () {
+                  Provider.of<ServerSettingsProvider>(context, listen: false).updateServer(server);
+
                 });
 
-                Future.delayed(const Duration(milliseconds: 500), () async {
-                  await Navigator.maybePop(context);
-                });
 
 
 
