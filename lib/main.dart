@@ -1,5 +1,5 @@
 
-import 'package:pterodactyl_app/presentation/screens/providers/theme_provider.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:pterodactyl_app/presentation/screens/screens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
@@ -20,15 +20,14 @@ void main() async {
     join(await getDatabasesPath(), 'servers.db'),
     onCreate: (db, version) {
       return db.execute(
-        'CREATE TABLE servers(socket TEXT, panel TEXT, apiKey TEXT, serverId TEXT, name TEXT, optionalTag TEXT)',
+        'CREATE TABLE servers(id INTEGER PRIMARY KEY AUTOINCREMENT, socket TEXT, panel TEXT, apiKey TEXT, serverId TEXT, name TEXT, optionalTag TEXT)',
       );
     },
     version: 1,
   );
   
 
-  final prefs = SharedPreferences.getInstance().then((x) => x.getBool("isDarkMode"));
-
+  
   
 
   
@@ -43,8 +42,7 @@ void main() async {
      MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ServerSettingsProvider()),
-        ChangeNotifierProvider(create: (_) => ThemeProvider(ThemeData.dark())),
-      ] ,
+    ] ,
       child: const MyApp(),  
     ),
   );
@@ -59,29 +57,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    return FutureBuilder<bool>(
-      future: getThemeMode(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(); // Muestra un indicador de carga mientras espera
-        } else {
+    
           return MaterialApp(
             title: 'Pterodactyl App',
             debugShowCheckedModeBanner: false,
-            theme: AppTheme(colorSeleccionado: 1, isDarkMode: snapshot.data ?? false).getTheme(),
+            theme: FlexThemeData.light(scheme: FlexScheme.bahamaBlue),
+            darkTheme: FlexThemeData.dark(scheme: FlexScheme.bahamaBlue),
+            themeMode: ThemeMode.dark,
             routes: {
               '/': (context) => const MainMenu(),
-              '/settings': (context) => const AppSettings(),
               '/addserver': (context) => AddServer(),
             },
           );
-        }
-      },
-    );
+        
+      
+    
   }
 
-  Future<bool> getThemeMode() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('isDarkTheme') ?? false;
-  }
 }

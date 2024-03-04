@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 class Server {
+  late int id = 0;
   late String socketUrl = '';
 
   late String panelUrl;
@@ -20,6 +23,7 @@ class Server {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'socket': socketUrl,
       'panel': panelUrl,
       'apiKey': apiKey,

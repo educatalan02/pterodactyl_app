@@ -34,12 +34,7 @@ Widget build(BuildContext context) {
       
       actions: [
         
-        IconButton(
-          icon: const Icon(Icons.settings),
-          onPressed: () {
-            Navigator.pushNamed(context, '/settings');
-          },
-        ),
+        
         IconButton(
           icon: const Icon(Icons.add),
           onPressed: () {
