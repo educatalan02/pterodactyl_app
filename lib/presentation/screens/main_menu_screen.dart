@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:pterodactyl_app/entities/model/server.dart';
-import 'package:pterodactyl_app/presentation/screens/server/server.dart';
+import 'package:pterodactyl_app/presentation/screens/screens.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -33,11 +33,18 @@ Widget build(BuildContext context) {
       title: const Text('Pterodactyl App'),
       
       actions: [
+        
         IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () {
+            Navigator.pushNamed(context, '/settings');
+          },
+        ),
+        IconButton(
+          icon: const Icon(Icons.add),
           onPressed: () {
             Navigator.pushNamed(context, '/addserver');
           },
-          icon: const Icon(Icons.add),
         ),
       ],
     ),
@@ -50,11 +57,11 @@ Widget build(BuildContext context) {
               itemCount: snapshot.data?.length,
               itemBuilder: (BuildContext context, int index) {
                 return Card(
-                  color: Colors.grey[800],
+                  
                   child: ListTile(
-                    leading: const Icon(Icons.cloud, color: Colors.white),
-                    title: Text(snapshot.data![index].name, style: const TextStyle(color: Colors.white)),
-                    subtitle: Text(snapshot.data![index].panelUrl, style: const TextStyle(color: Colors.white)),
+                    leading: const Icon(Icons.cloud),
+                    title: Text(snapshot.data![index].name),
+                    subtitle: Text(snapshot.data![index].panelUrl),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -68,7 +75,20 @@ Widget build(BuildContext context) {
               },
             );
           } else if (snapshot.hasError) {
-            return Text("error ${snapshot.error}");
+            return Shimmer.fromColors(
+            baseColor: Colors.grey[800]!,
+            highlightColor: Colors.grey[700]!,
+            child: GridView.count(crossAxisCount:4,
+          children: [ Card(
+            color: Colors.grey[800],
+            child: const ListTile(
+              leading: Icon(Icons.cloud),
+              title: Text('Server Name'),
+              subtitle: Text('Panel URL'),
+            ),
+          )]
+          ),
+          );
           }
 
           return const CircularProgressIndicator();

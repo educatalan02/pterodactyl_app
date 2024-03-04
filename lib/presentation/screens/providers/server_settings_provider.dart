@@ -1,5 +1,5 @@
 
-import 'package:flutter/material.dart';
+import 'package:pterodactyl_app/presentation/screens/screens.dart';
 import 'package:pterodactyl_app/entities/model/server.dart';
 
 class ServerSettingsProvider extends ChangeNotifier{

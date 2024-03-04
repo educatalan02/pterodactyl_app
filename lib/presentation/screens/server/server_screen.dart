@@ -1,15 +1,12 @@
 import 'dart:convert';
 
-import 'package:fl_chart/fl_chart.dart';
 
-import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 import 'package:pterodactyl_app/entities/model/server.dart';
 import 'package:pterodactyl_app/entities/model/usage_data.dart';
 import 'package:http/http.dart' as http;
-import 'package:pterodactyl_app/presentation/screens/providers/server_settings_provider.dart';
-import 'package:pterodactyl_app/presentation/screens/server/console.dart';
-import 'package:pterodactyl_app/presentation/screens/server/server_settings.dart';
+import 'package:pterodactyl_app/presentation/screens/screens.dart';
 import 'package:shimmer/shimmer.dart';
 
 // ignore: must_be_immutable
@@ -121,7 +118,7 @@ late bool serverIsSuspended = false;
           return GridView.count(crossAxisCount:4,
           children: [
             Card(
-              color: Colors.grey[850],
+
               child: Padding(padding:  const EdgeInsets.all(8.0),
               child: Column(mainAxisAlignment: MainAxisAlignment.center,
               children: [const Icon(Icons.memory),
@@ -132,7 +129,7 @@ late bool serverIsSuspended = false;
             ),
             ),
             Card(
-              color: Colors.grey[850],
+
               child: Padding(padding:  const EdgeInsets.all(8.0),
               child: Column(mainAxisAlignment: MainAxisAlignment.center,
               children: [const Icon(Icons.storage),
@@ -143,7 +140,7 @@ late bool serverIsSuspended = false;
             ),
             ),
             Card(
-              color: Colors.grey[850],
+
               child: Padding(padding:  const EdgeInsets.all(8.0),
               child: Column(mainAxisAlignment: MainAxisAlignment.center,
               children: [const Icon(Icons.sd_storage),
@@ -155,7 +152,7 @@ late bool serverIsSuspended = false;
             ),
 
             Card(
-              color: Colors.grey[850],
+
               child: Padding(padding:  const EdgeInsets.all(8.0),
               child: Column(mainAxisAlignment: MainAxisAlignment.center,
               children: [const Icon(Icons.timer),
@@ -225,10 +222,6 @@ late bool serverIsSuspended = false;
           icon: Icon(Icons.laptop_chromebook),
           label: 'Console',
           
-
-          
-
-
           
         ),
         BottomNavigationBarItem(
@@ -245,8 +238,8 @@ late bool serverIsSuspended = false;
         }
       
       },
-      selectedItemColor: Colors.blue[800],
-      backgroundColor: Colors.grey[850],
+
+
     ),
     );
 

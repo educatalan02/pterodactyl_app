@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:pterodactyl_app/entities/model/server.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:web_socket_channel/io.dart';
 import 'package:http/http.dart' as http;
+import 'package:web_socket_channel/io.dart';
+
+import 'package:pterodactyl_app/entities/model/server.dart';
+import 'package:pterodactyl_app/presentation/screens/screens.dart';
 
 // ignore: must_be_immutable
 class Console extends StatefulWidget {
@@ -118,18 +118,16 @@ class _ConsoleState extends State<Console> {
     return Scaffold(
       appBar: AppBar(
           elevation: 0.0,
-          backgroundColor: Colors.black,
           leading: IconButton(
-            color: Colors.white,
             onPressed: () {
               _channel.sink.close();
               Navigator.pop(context);
             },
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            icon: const Icon(Icons.arrow_back),
           ),
           title: const Text(
             "Console",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+            style: TextStyle(fontWeight: FontWeight.w700),
           )),
       body: SafeArea(
         child: Column(
@@ -146,7 +144,6 @@ class _ConsoleState extends State<Console> {
                         width: double.infinity,
                         child: Text(
                           removeAnsiCodes(message),
-                          style: const TextStyle(color: Colors.white),
                         ),
                       ),
                   ],
@@ -162,13 +159,11 @@ class _ConsoleState extends State<Console> {
                 );
                 _controller.clear();
               },
-              style: const TextStyle(color: Colors.white),
+
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 filled: true,
                 fillColor: Colors.black45,
-                hintStyle: TextStyle(color: Colors.white),
-                prefixStyle: TextStyle(color: Colors.white),
                 hintText: "Type a command here...",
               ),
               controller: _controller,

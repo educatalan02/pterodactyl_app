@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:pterodactyl_app/entities/model/server.dart';
-import 'package:pterodactyl_app/presentation/screens/providers/server_settings_provider.dart';
+import 'package:pterodactyl_app/presentation/screens/screens.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ServerSettings extends StatelessWidget {
-  ServerSettings({super.key, required this.server});
+  const ServerSettings({super.key, required this.server});
   final Server server;
 
   
@@ -46,10 +45,9 @@ class ServerSettings extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: server.optionalTag,
-                labelStyle: const TextStyle(color: Colors.blue),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Optional Tag',
               ),
               controller: tagController,
             ),
@@ -59,7 +57,6 @@ class ServerSettings extends StatelessWidget {
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Server ID',
-                labelStyle: TextStyle(color: Colors.blue),
               ),
               controller: serverIdController,
             ),
@@ -68,7 +65,6 @@ class ServerSettings extends StatelessWidget {
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'API Key',
-                labelStyle: TextStyle(color: Colors.blue),
               ),
               controller: apiKeyController,
             ),
@@ -78,7 +74,6 @@ class ServerSettings extends StatelessWidget {
                 border: OutlineInputBorder(),
                 labelText: 'Panel URL',
                 
-                labelStyle: TextStyle(color: Colors.blue),
               ),
               controller: panelController,
             ),
