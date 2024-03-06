@@ -1,6 +1,7 @@
-
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:get/get.dart';
 import 'package:pterodactyl_app/presentation/screens/screens.dart';
+import 'package:pterodactyl_app/translations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -25,53 +26,24 @@ void main() async {
     },
     version: 1,
   );
-  
-
-  
-  
-
-  
-
 
   runApp(
-    // get thememode from shared preferences
-
-    
-
-
-     MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ServerSettingsProvider()),
-    ] ,
-      child: const MyApp(),  
+    GetMaterialApp(
+      home: const MainMenu(),
+      initialRoute: '/',
+      defaultTransition: Transition.native,
+      translations: AppTranslations(),
+      locale: const Locale('es', 'ES'),
+      fallbackLocale: const Locale('en', 'US'),
+      getPages: [
+        GetPage(name: '/', page: () => const MainMenu()),
+        GetPage(name: '/addserver', page: () => AddServer()),
+      ],
+      debugShowCheckedModeBanner: false,
+      theme: FlexThemeData.light(scheme: FlexScheme.bahamaBlue),
+      darkTheme: FlexThemeData.dark(scheme: FlexScheme.bahamaBlue),
+      themeMode: ThemeMode.light,
     ),
+    // get thememode from shared preferences
   );
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-
-
-  @override
-  Widget build(BuildContext context) {
-    
-    
-          return MaterialApp(
-            title: 'Pterodactyl App',
-            debugShowCheckedModeBanner: false,
-            theme: FlexThemeData.light(scheme: FlexScheme.bahamaBlue),
-            darkTheme: FlexThemeData.dark(scheme: FlexScheme.bahamaBlue),
-            themeMode: ThemeMode.dark,
-            routes: {
-              '/': (context) => const MainMenu(),
-              '/addserver': (context) => AddServer(),
-            },
-          );
-        
-      
-    
-  }
-
 }

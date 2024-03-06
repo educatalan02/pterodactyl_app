@@ -15,11 +15,9 @@ class Console extends StatefulWidget {
 
   @override
   State<Console> createState() => _ConsoleState();
-  
 }
 
 class _ConsoleState extends State<Console> {
-  
   late IOWebSocketChannel _channel;
   List<String> messages = [];
 
@@ -41,7 +39,7 @@ class _ConsoleState extends State<Console> {
         setState(() {
           messages.add(data["args"][0].toString());
         });
-        if(messages.length > 100) {
+        if (messages.length > 100) {
           messages.removeRange(0, 99);
         }
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -49,7 +47,6 @@ class _ConsoleState extends State<Console> {
             _scrollController.position.maxScrollExtent,
           );
         });
-        
       }
     });
   }
@@ -99,22 +96,16 @@ class _ConsoleState extends State<Console> {
     super.dispose();
 
     _channel.sink.close();
-    
   }
 
   @override
   void initState() {
     super.initState();
     fetchServerDetails(widget.server);
-    
-
-    
-  
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
           elevation: 0.0,
@@ -159,7 +150,6 @@ class _ConsoleState extends State<Console> {
                 );
                 _controller.clear();
               },
-
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 filled: true,
