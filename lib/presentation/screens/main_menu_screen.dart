@@ -1,4 +1,6 @@
+import 'package:get/get.dart';
 import 'package:pterodactyl_app/entities/model/server.dart';
+import 'package:pterodactyl_app/presentation/screens/main/settings_screen.dart';
 import 'package:pterodactyl_app/presentation/screens/screens.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sqflite/sqflite.dart';
@@ -25,71 +27,67 @@ class MainMenu extends StatelessWidget {
     });
   }
 
-  
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: const Text('Pterodactyl App'),
-      
-      actions: [
-        
-        
-        IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            Navigator.pushNamed(context, '/addserver');
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pterodactyl App'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Get.to(const AppSettings());
+            },
+          ),
+        ],
+      ),
+      body: Center(
+        child: FutureBuilder<List<Server>>(
+          future: getServers(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<Server>> snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data?.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.cloud),
+                      title: Text(snapshot.data![index].name),
+                      subtitle: Text(snapshot.data![index].panelUrl),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ServerPanel(server: snapshot.data![index]),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              );
+            } else if (snapshot.hasError) {
+              return Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: GridView.count(crossAxisCount: 4, children: const [
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.cloud),
+                      title: Text('Server Name'),
+                      subtitle: Text('Panel URL'),
+                    ),
+                  )
+                ]),
+              );
+            }
+
+            return const CircularProgressIndicator();
           },
         ),
-      ],
-    ),
-    body: Center(
-      child: FutureBuilder<List<Server>>(
-        future: getServers(),
-        builder: (BuildContext context, AsyncSnapshot<List<Server>> snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data?.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Card(
-                  
-                  child: ListTile(
-                    leading: const Icon(Icons.cloud),
-                    title: Text(snapshot.data![index].name),
-                    subtitle: Text(snapshot.data![index].panelUrl),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ServerPanel(server: snapshot.data![index]),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
-            );
-          } else if (snapshot.hasError) {
-            return Shimmer.fromColors(
-            baseColor: Colors.grey[800]!,
-            highlightColor: Colors.grey[700]!,
-            child: GridView.count(crossAxisCount:4,
-          children: [ Card(
-            color: Colors.grey[800],
-            child: const ListTile(
-              leading: Icon(Icons.cloud),
-              title: Text('Server Name'),
-              subtitle: Text('Panel URL'),
-            ),
-          )]
-          ),
-          );
-          }
-
-          return const CircularProgressIndicator();
-        },
       ),
-    ),
-  );
-}
+    );
+  }
 }

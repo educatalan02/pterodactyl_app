@@ -8,11 +8,7 @@ class ServerSettings extends StatelessWidget {
   const ServerSettings({super.key, required this.server});
   final Server server;
 
-  
-
-
   Future<void> updateServer(Server server) async {
-
     final database = openDatabase(
       join(await getDatabasesPath(), 'servers.db'),
     );
@@ -27,80 +23,70 @@ class ServerSettings extends StatelessWidget {
     });
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
-    final TextEditingController tagController = TextEditingController(text: server.optionalTag);
-  final TextEditingController serverIdController = TextEditingController(text: server.serverId);
-  final TextEditingController apiKeyController = TextEditingController(text: server.apiKey);
-  final TextEditingController panelController = TextEditingController(text: server.panelUrl);
+    final TextEditingController tagController =
+        TextEditingController(text: server.optionalTag);
+    final TextEditingController serverIdController =
+        TextEditingController(text: server.serverId);
+    final TextEditingController apiKeyController =
+        TextEditingController(text: server.apiKey);
+    final TextEditingController panelController =
+        TextEditingController(text: server.panelUrl);
     return Scaffold(
       appBar: AppBar(
         title: Text(server.name),
-        
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Optional Tag',
-              ),
-              controller: tagController,
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          TextField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Optional Tag',
             ),
-            const SizedBox(height: 10),
-
-            TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Server ID',
-              ),
-              controller: serverIdController,
+            controller: tagController,
+          ),
+          const SizedBox(height: 10),
+          TextField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Server ID',
             ),
-            const SizedBox(height: 10),
-            TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'API Key',
-              ),
-              controller: apiKeyController,
+            controller: serverIdController,
+          ),
+          const SizedBox(height: 10),
+          TextField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'API Key',
             ),
-            const SizedBox(height: 10),
-            TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Panel URL',
-                
-              ),
-              controller: panelController,
+            controller: apiKeyController,
+          ),
+          const SizedBox(height: 10),
+          TextField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Panel URL',
             ),
-            ElevatedButton(
-              onPressed: () async {
-                server.optionalTag = tagController.text;
-                server.serverId = serverIdController.text;
-                server.apiKey = apiKeyController.text;
-                server.panelUrl = panelController.text;
+            controller: panelController,
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              server.optionalTag = tagController.text;
+              server.serverId = serverIdController.text;
+              server.apiKey = apiKeyController.text;
+              server.panelUrl = panelController.text;
 
-                await updateServer(server);
+              await updateServer(server);
 
-                Future.delayed(Duration.zero, () {
-                  Provider.of<ServerSettingsProvider>(context, listen: false).updateServer(server);
-
-                });
-
-
-
-
-               
-              },
-              child: const Text('Save'),
-            ),
-          ]
-          
-        ),
+              Future.delayed(Duration.zero, () {
+                Provider.of<ServerSettingsProvider>(context, listen: false)
+                    .updateServer(server);
+              });
+            },
+            child: const Text('Save'),
+          ),
+        ]),
       ),
     );
   }
