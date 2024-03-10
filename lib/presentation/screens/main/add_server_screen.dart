@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:pterodactyl_app/presentation/screens/screens.dart';
 import 'package:pterodactyl_app/entities/model/server.dart';
 import 'package:sqflite/sqflite.dart';
@@ -18,7 +19,7 @@ class AddServer extends StatelessWidget {
     await db.insert(
       'servers',
       server.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      conflictAlgorithm: ConflictAlgorithm.ignore,
     );
   }
 
@@ -79,6 +80,8 @@ class AddServer extends StatelessWidget {
   final TextEditingController _apiKeyController = TextEditingController();
   final TextEditingController _serverIdController = TextEditingController();
 
+  final ServerController serverController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,9 +131,8 @@ class AddServer extends StatelessWidget {
 
                 await insertServer(server);
 
-                await Future.delayed(Duration.zero, () {
-                  Navigator.maybePop(context);
-                });
+                serverController.fetchServers();
+                Get.back();
               },
               child: const Text('Save'),
             ),

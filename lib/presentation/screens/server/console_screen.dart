@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/io.dart';
 
@@ -116,8 +117,8 @@ class _ConsoleState extends State<Console> {
             },
             icon: const Icon(Icons.arrow_back),
           ),
-          title: const Text(
-            "Console",
+          title:  Text(
+            "console".tr,
             style: TextStyle(fontWeight: FontWeight.w700),
           )),
       body: SafeArea(
@@ -150,11 +151,11 @@ class _ConsoleState extends State<Console> {
                 );
                 _controller.clear();
               },
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 border: InputBorder.none,
                 filled: true,
                 fillColor: Colors.black45,
-                hintText: "Type a command here...",
+                hintText: "type_a_command".tr,
               ),
               controller: _controller,
             ),

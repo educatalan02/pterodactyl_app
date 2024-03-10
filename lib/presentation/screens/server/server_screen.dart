@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:pterodactyl_app/entities/model/server.dart';
 import 'package:pterodactyl_app/entities/model/usage_data.dart';
 import 'package:http/http.dart' as http;
@@ -54,8 +53,8 @@ class _ServerPanelState extends State<ServerPanel> {
                   if (response.statusCode == 204) {
                     setState(() {
                       // snackbar
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Server is starting...')));
+                      Get.snackbar('server_starting'.tr, '',
+                      backgroundColor: Colors.white, colorText: Colors.black);
                       serverIsSuspended = false;
                     });
                   }
@@ -83,7 +82,7 @@ class _ServerPanelState extends State<ServerPanel> {
                   });
 
                   // snackbar
-                  Get.snackbar('Server is stopping...', '',
+                  Get.snackbar('server_stopping'.tr, '',
                       backgroundColor: Colors.white, colorText: Colors.black);
                 }
               },
@@ -157,8 +156,6 @@ class _ServerPanelState extends State<ServerPanel> {
                 ),
               ],
             );
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
           } else {
             return Shimmer.fromColors(
               baseColor: Colors.grey[800]!,
@@ -209,14 +206,14 @@ class _ServerPanelState extends State<ServerPanel> {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items:  <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.laptop_chromebook),
-            label: 'Console',
+            icon: const Icon(Icons.laptop_chromebook),
+            label: 'console'.tr,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: const Icon(Icons.settings),
+            label: 'settings'.tr,
           ),
         ],
         onTap: (value) {

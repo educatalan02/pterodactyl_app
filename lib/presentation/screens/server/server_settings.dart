@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:pterodactyl_app/entities/model/server.dart';
@@ -84,7 +85,7 @@ class ServerSettings extends StatelessWidget {
                     .updateServer(server);
               });
             },
-            child: const Text('Save'),
+            child: Text('save'.tr),
           ),
         ]),
       ),

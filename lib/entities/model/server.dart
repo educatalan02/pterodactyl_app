@@ -23,7 +23,6 @@ class Server {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'socket': socketUrl,
       'panel': panelUrl,
       'apiKey': apiKey,

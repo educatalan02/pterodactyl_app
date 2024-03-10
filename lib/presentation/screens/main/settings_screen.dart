@@ -1,16 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:pterodactyl_app/presentation/screens/screens.dart';
 import 'package:pterodactyl_app/translations.dart';
 
 class AppSettingsController extends GetxController {
   RxBool isDarkMode = (Get.isDarkMode).obs;
   RxString language = (Get.locale?.languageCode ?? 'en').obs;
+  GetStorage box = GetStorage();
+
+  @override
+  void onInit() {
+    isDarkMode.value = box.read('isDarkMode') ?? Get.isDarkMode;
+    language.value = box.read('language') ?? Get.locale!.languageCode;
+    super.onInit();
+  }
+
+
+
+  
 }
 
 class AppSettings extends StatelessWidget {
   const AppSettings({super.key});
   AppSettingsController get _controller => Get.put(AppSettingsController());
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +40,9 @@ class AppSettings extends StatelessWidget {
                 value: _controller.isDarkMode.value,
                 onChanged: (bool value) {
                   _controller.isDarkMode.value = value;
+
+                  
+                  _controller.box.write('isDarkMode', value);
                   Get.changeThemeMode(value ? ThemeMode.dark : ThemeMode.light);
                 },
               ),
@@ -42,6 +59,8 @@ class AppSettings extends StatelessWidget {
                   onChanged: (String? languageCode) {
                     if (languageCode != null) {
                       _controller.language.value = languageCode;
+
+                      _controller.box.write('language', languageCode);
                       Get.updateLocale(Locale(languageCode));
                     }
                   },
