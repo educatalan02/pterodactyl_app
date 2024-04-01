@@ -11,6 +11,8 @@ import 'package:shimmer/shimmer.dart';
 class ServerPanel extends StatefulWidget {
   const ServerPanel({super.key, required this.server});
 
+
+
   final Server server;
 
   @override
@@ -20,6 +22,9 @@ class ServerPanel extends StatefulWidget {
 class _ServerPanelState extends State<ServerPanel> {
   late bool serverIsSuspended = false;
 
+  
+  late List<String> files;
+
   late final bool animate;
 
   @override
@@ -27,10 +32,6 @@ class _ServerPanelState extends State<ServerPanel> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.server.name),
-        bottom: PreferredSize(
-          preferredSize: Size.zero,
-          child: Text(widget.server.optionalTag),
-        ),
         actions: [
           if (serverIsSuspended)
             IconButton(
@@ -154,6 +155,16 @@ class _ServerPanelState extends State<ServerPanel> {
                     ),
                   ),
                 ),
+
+
+                ListView.builder(itemBuilder: (BuildContext context, index) {
+                  return Card(
+                    child: ListTile(
+                      title: Text(files[index]),
+                    ),
+                  );
+                  
+                }, itemCount: files.length,), 
               ],
             );
           } else {
@@ -251,6 +262,46 @@ class _ServerPanelState extends State<ServerPanel> {
     super.initState();
 
     fetchServerResources();
+
+    fetchFiles().then((value) {
+      setState(() {
+        files = value;
+      });
+    });
+  }
+
+  Future<List<String>> fetchFiles() async {
+    final response = await http.get(
+      Uri.parse(
+          '${widget.server.panelUrl}/api/client/servers/${widget.server.serverId}/files/list?directory=/'),
+      headers: <String, String>{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${widget.server.apiKey}',
+      },
+    );
+
+    switch (response.statusCode) {
+      case 200:
+        // Si el servidor devuelve una respuesta OK, parsea el JSON.
+        final data = jsonDecode(response.body);
+        var files = List<String>.empty(growable: true);
+        print(data);
+        
+        for (var file in data["data"]) {
+          files.add(file["attributes"]["name"]);
+        }
+
+        
+        return files;
+      case 401:
+        throw Exception('Unauthorized request. Check your API key.');
+      case 404:
+        throw Exception('Server not found. Check your server ID.');
+      default:
+        throw Exception(
+            'Failed to load server details. Status code: ${response.statusCode}');
+    }
   }
 
   Future<UsageData> fetchServerResources() async {

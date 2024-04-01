@@ -13,7 +13,7 @@ class AppTranslations extends Translations {
           'type_a_command': 'Type a command here...',
           'server_starting': 'Server is starting...',
           'server_stopping': 'Server is stopping...',
-          // Add more English translations here
+          
         },
         'es_ES': {
           'settings': 'Ajustes',
@@ -25,8 +25,8 @@ class AppTranslations extends Translations {
           'type_a_command': 'Escribe un comando aquí...',
           'server_starting': 'El servidor se está iniciando...',
           'server_stopping': 'El servidor se está deteniendo...',
-          // Add more Spanish translations here
+          
         },
-        // Add more languages here
+        
       };
 }
