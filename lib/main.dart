@@ -14,7 +14,7 @@ void main() async {
   // delete the database
   //await deleteDatabase(join(await getDatabasesPath(), 'servers.db'));
 
-  // ignore: unused_local_variable
+  
   final database = openDatabase(
     join(await getDatabasesPath(), 'servers.db'),
     onCreate: (db, version) {
@@ -24,6 +24,9 @@ void main() async {
     },
     version: 1,
   );
+
+
+  
   await GetStorage.init();
 
   runApp(

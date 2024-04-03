@@ -6,8 +6,6 @@ class UsageData {
   final bool isSuspended;
   final String currentState;
 
-
-
   UsageData({
     required this.uptime,
     required this.cpu,
@@ -16,5 +14,4 @@ class UsageData {
     required this.isSuspended,
     required this.currentState,
   });
-  
 }

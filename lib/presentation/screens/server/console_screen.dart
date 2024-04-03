@@ -119,7 +119,7 @@ class _ConsoleState extends State<Console> {
           ),
           title:  Text(
             "console".tr,
-            style: TextStyle(fontWeight: FontWeight.w700),
+            style: const TextStyle(fontWeight: FontWeight.w700),
           )),
       body: SafeArea(
         child: Column(

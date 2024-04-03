@@ -11,7 +11,6 @@ class Server {
 
   late String name = '';
   late String optionalTag = '';
-  
 
   Server({
     required this.socketUrl,

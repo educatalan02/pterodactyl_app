@@ -48,6 +48,9 @@ dependencies:
   get: ^4.6.6
   get_storage: ^2.1.1
   another_flutter_splash_screen: ^1.2.0
+  animated_tree_view: ^2.2.0
+  dio: ^5.4.2+1
+  path_provider: ^2.1.2
   
 
 dev_dependencies:

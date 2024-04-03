@@ -17,7 +17,6 @@ class ServerController extends GetxController {
     super.onInit();
     fetchServers();
   }
-
   void fetchServers() async {
     final Database db = await openDatabase(
       join(await getDatabasesPath(), 'servers.db'),
