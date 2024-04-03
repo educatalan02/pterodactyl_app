@@ -34,14 +34,43 @@ class _ServerPanelState extends State<ServerPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.server.name),
-        actions: [
-          if (serverIsSuspended)
-            IconButton(
-                icon: const Icon(Icons.power_settings_new_outlined,
-                    color: Colors.red),
+    return DefaultTabController(
+      length: 6,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.server.name),
+          actions: [
+            if (serverIsSuspended)
+              IconButton(
+                  icon: const Icon(Icons.power_settings_new_outlined,
+                      color: Colors.red),
+                  onPressed: () async {
+                    final response = await http.post(
+                      Uri.parse(
+                          '${widget.server.panelUrl}/api/client/servers/${widget.server.serverId}/power'),
+                      headers: <String, String>{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ${widget.server.apiKey}',
+                      },
+                      body: jsonEncode(<String, String>{
+                        'signal': 'start',
+                      }),
+                    );
+
+                    if (response.statusCode == 204) {
+                      setState(() {
+                        // snackbar
+                        Get.snackbar('server_starting'.tr, '',
+                            backgroundColor: Colors.white,
+                            colorText: Colors.black);
+                        serverIsSuspended = false;
+                      });
+                    }
+                  }),
+            if (!serverIsSuspended)
+              IconButton(
+                icon: const Icon(Icons.power_settings_new, color: Colors.green),
                 onPressed: () async {
                   final response = await http.post(
                     Uri.parse(
@@ -52,315 +81,279 @@ class _ServerPanelState extends State<ServerPanel> {
                       'Authorization': 'Bearer ${widget.server.apiKey}',
                     },
                     body: jsonEncode(<String, String>{
-                      'signal': 'start',
+                      'signal': 'stop',
                     }),
                   );
 
                   if (response.statusCode == 204) {
                     setState(() {
-                      // snackbar
-                      Get.snackbar('server_starting'.tr, '',
-                          backgroundColor: Colors.white,
-                          colorText: Colors.black);
-                      serverIsSuspended = false;
+                      serverIsSuspended = true;
                     });
+
+                    // snackbar
+                    Get.snackbar('server_stopping'.tr, '',
+                        backgroundColor: Colors.white, colorText: Colors.black);
                   }
-                }),
-          if (!serverIsSuspended)
-            IconButton(
-              icon: const Icon(Icons.power_settings_new, color: Colors.green),
-              onPressed: () async {
-                final response = await http.post(
-                  Uri.parse(
-                      '${widget.server.panelUrl}/api/client/servers/${widget.server.serverId}/power'),
-                  headers: <String, String>{
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ${widget.server.apiKey}',
-                  },
-                  body: jsonEncode(<String, String>{
-                    'signal': 'stop',
-                  }),
-                );
-
-                if (response.statusCode == 204) {
-                  setState(() {
-                    serverIsSuspended = true;
-                  });
-
-                  // snackbar
-                  Get.snackbar('server_stopping'.tr, '',
-                      backgroundColor: Colors.white, colorText: Colors.black);
-                }
-              },
-            ),
-        ],
-      ),
-      body: StreamBuilder<UsageData>(
-        stream: fetchServerResourcesStream(),
-        builder: (BuildContext context, AsyncSnapshot<UsageData> snapshot) {
-          if (snapshot.hasData && !serverIsSuspended) {
-            return Column(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: GridView.count(
-                    crossAxisCount: 4,
-                    children: [
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.memory),
-                              const Text("CPU",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                              Text('${snapshot.data!.cpu.toStringAsFixed(2)}%'),
-                            ],
+                },
+              ),
+          ],
+        ),
+        body: StreamBuilder<UsageData>(
+          stream: fetchServerResourcesStream(),
+          builder: (BuildContext context, AsyncSnapshot<UsageData> snapshot) {
+            if (snapshot.hasData && !serverIsSuspended) {
+              return Column(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: GridView.count(
+                      crossAxisCount: 4,
+                      children: [
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.memory),
+                                const Text("CPU",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                Text(
+                                    '${snapshot.data!.cpu.toStringAsFixed(2)}%'),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.storage),
-                              const Text("RAM",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                              Text(
-                                  '${(snapshot.data!.ram / 1073741824).toStringAsFixed(2)} GB'),
-                            ],
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.storage),
+                                const Text("RAM",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                Text(
+                                    '${(snapshot.data!.ram / 1073741824).toStringAsFixed(2)} GB'),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.sd_storage),
-                              const Text("Disk",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                              Text(
-                                  '${(snapshot.data!.disk / 1073741824).toStringAsFixed(2)} GB'),
-                            ],
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.sd_storage),
+                                const Text("Disk",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                Text(
+                                    '${(snapshot.data!.disk / 1073741824).toStringAsFixed(2)} GB'),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.timer),
-                              const Text("Uptime",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                              Text(getUptime(snapshot.data!.uptime)),
-                            ],
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.timer),
+                                const Text("Uptime",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                Text(getUptime(snapshot.data!.uptime)),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: ValueListenableBuilder<String>(
-                    valueListenable: ValueNotifier<String>(currentDirectory),
-                    builder: (context, value, child) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
+                  const TabBar(tabs: [
+                    Tab(
+                      icon: Icon(Icons.folder),
+                      text: 'Files',
+                    ),
+                    Tab(
+                      icon: Icon(Icons.data_object_sharp),
+                      text: 'Databases',
+                    ),
+                    Tab(
+                      icon: Icon(Icons.schedule),
+                      text: 'Schedules',
+                    ),
+                    Tab(
+                      icon: Icon(Icons.verified_user_sharp),
+                      text: 'Users',
+                    ),
+                    Tab(
+                      icon: Icon(Icons.backup),
+                      text: 'Backups',
+                    ),
+                    Tab(
+                      icon: Icon(Icons.settings),
+                      text: 'Settings',
+                    ),
+                  ]),
+                  Expanded(
+                    flex: 4,
+                    child: TabBarView(
+                      children: [
+                        Column(
+                          // This is the 'Files' tab
                           children: [
-                            IconButton(
-                                onPressed: () {
-                                  currentDirectory =
-                                      path.dirname(currentDirectory);
-                                  fetchAllFiles(currentDirectory).then((value) {
-                                    setState(() {
-                                      fileAndDirectoryNames = value
-                                          .map((e) => path.basename(e))
-                                          .toList();
-                                    });
-                                  });
-                                },
-                                icon: const Icon(Icons.arrow_back)),
-                            Text(currentDirectory),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Expanded(
-                  flex: 4,
-                  child: ValueListenableBuilder<List<String>>(
-                    valueListenable:
-                        ValueNotifier<List<String>>(fileAndDirectoryNames),
-                    builder: (context, value, child) {
-                      return ListView.builder(
-                        itemCount: fileAndDirectoryNames.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            child: ListTile(
-                              title: Text(fileAndDirectoryNames[index]),
-                              onTap: () {
-                                var file = fileAndDirectoryNames[index];
-
-                                if (file.contains('.')) {
-                                  var fileType =
-                                      path.extension(file).substring(1);
-                                  var fileName = path.basename(file);
-
-                                  Get.dialog(
-                                    AlertDialog(
-                                      title: Text(fileName),
-                                      content: Column(
-                                        children: [
-                                          Expanded(
-                                              child: TextField(
-                                            scrollController: _scrollController,
-                                            controller: _controller,
-                                            maxLines: null,
-                                          ))
-                                        ],
-                                      ),
-                                      actions: [
+                            Expanded(
+                              child: ValueListenableBuilder<String>(
+                                valueListenable:
+                                    ValueNotifier<String>(currentDirectory),
+                                builder: (context, value, child) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
                                         IconButton(
                                             onPressed: () {
-
-                                              downloadFile("$currentDirectory/$file", file);
+                                              currentDirectory = path
+                                                  .dirname(currentDirectory);
+                                              fetchAllFiles(currentDirectory)
+                                                  .then((value) {
+                                                setState(() {
+                                                  fileAndDirectoryNames = value
+                                                      .map((e) =>
+                                                          path.basename(e))
+                                                      .toList();
+                                                });
+                                              });
                                             },
-                                            icon: const Icon(Icons.download)),
-                                        IconButton(
-                                            onPressed: () {
-                                              updateFileContent(
-                                                  "$currentDirectory/$file",
-                                                  _controller.text);
-                                            },
-                                            icon: const Icon(Icons.save)),
-                                        IconButton(
-                                            onPressed: () {},
-                                            icon: const Icon(Icons.delete))
+                                            icon: const Icon(Icons.arrow_back)),
+                                        Text(currentDirectory),
                                       ],
                                     ),
                                   );
-                                  print(file);
-                                  print(currentDirectory + "/" + file);
-                                  getFileContent("$currentDirectory/$file")
-                                      .then((value) {
-                                    _controller.text = value;
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      _scrollController.jumpTo(_scrollController
-                                          .position.maxScrollExtent);
-                                    });
-                                  });
-                                } else {
-                                  // open directory
-                                  currentDirectory =
-                                      path.join(currentDirectory, file);
-                                  fetchAllFiles(currentDirectory).then((value) {
-                                    setState(() {
-                                      print(file);
-                                      fileAndDirectoryNames = value
-                                          .map((e) => path.basename(e))
-                                          .toList();
-                                    });
-                                  });
-                                }
-                              },
+                                },
+                              ),
                             ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );
-          } else {
-            return Shimmer.fromColors(
-              baseColor: Colors.grey[800]!,
-              highlightColor: Colors.grey[700]!,
-              child: GridView.count(
-                crossAxisCount: 4,
-                children: [
-                  Card(
-                    color: Colors.grey[850],
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                      ),
-                    ),
-                  ),
-                  Card(
-                    color: Colors.grey[850],
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                      ),
-                    ),
-                  ),
-                  Card(
-                    color: Colors.grey[850],
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                      ),
-                    ),
-                  ),
-                  Card(
-                    color: Colors.grey[850],
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                      ),
+                            Expanded(
+                              flex: 4,
+                              child: ValueListenableBuilder<List<String>>(
+                                valueListenable: ValueNotifier<List<String>>(
+                                    fileAndDirectoryNames),
+                                builder: (context, value, child) {
+                                  return ListView.builder(
+                                    itemCount: fileAndDirectoryNames.length,
+                                    itemBuilder: (context, index) {
+                                      return Card(
+                                        child: ListTile(
+                                          title: Text(
+                                              fileAndDirectoryNames[index]),
+                                          onTap: () {
+                                            var file =
+                                                fileAndDirectoryNames[index];
+                                            // Rest of your onTap code...
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Rest of your tabs go here...
+
+                        Text('Databases'),
+                        Text('Schedules'),
+                        Text('Users'),
+                        Text('Backups'),
+                        Text('Settings'),
+
+                      ],
                     ),
                   ),
                 ],
-              ),
-            );
-          }
-        },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.laptop_chromebook),
-            label: 'console'.tr,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.settings),
-            label: 'settings'.tr,
-          ),
-        ],
-        onTap: (value) {
-          if (value == 0) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Console(server: widget.server)));
-          } else if (value == 1) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        ServerSettings(server: widget.server)));
-          }
-        },
+              );
+            } else {
+              return Shimmer.fromColors(
+                baseColor: Colors.grey[800]!,
+                highlightColor: Colors.grey[700]!,
+                child: GridView.count(
+                  crossAxisCount: 4,
+                  children: [
+                    Card(
+                      color: Colors.grey[850],
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        ),
+                      ),
+                    ),
+                    Card(
+                      color: Colors.grey[850],
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        ),
+                      ),
+                    ),
+                    Card(
+                      color: Colors.grey[850],
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        ),
+                      ),
+                    ),
+                    Card(
+                      color: Colors.grey[850],
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+          },
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.laptop_chromebook),
+              label: 'console'.tr,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.settings),
+              label: 'settings'.tr,
+            ),
+          ],
+          onTap: (value) {
+            if (value == 0) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Console(server: widget.server)));
+            } else if (value == 1) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ServerSettings(server: widget.server)));
+            }
+          },
+        ),
       ),
     );
   }
@@ -539,31 +532,25 @@ class _ServerPanelState extends State<ServerPanel> {
       },
     );
 
-
     Dio dio = Dio();
 
     var savePath = await getApplicationDocumentsDirectory();
 
-
     var data = jsonDecode(response.body);
 
-    
-    await dio.download(data['attributes']['url'], '${savePath.path}/$file',
-    options: Options(headers: <String,String>{
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${widget.server.apiKey}'
-    })).then((_) {
-        print('Download complete');
-      }).catchError((error) {
-        print('Download failed');
-        print(error);
-      });
-
-    
-    
-
-    
+    await dio
+        .download(data['attributes']['url'], '${savePath.path}/$file',
+            options: Options(headers: <String, String>{
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ${widget.server.apiKey}'
+            }))
+        .then((_) {
+      print('Download complete');
+    }).catchError((error) {
+      print('Download failed');
+      print(error);
+    });
 
     print(response.body);
   }
@@ -578,8 +565,6 @@ class _ServerPanelState extends State<ServerPanel> {
           'Authorization': 'Bearer ${widget.server.apiKey}',
         },
         body: jsonEncode(content));
-
-
 
     print(response.body);
   }
