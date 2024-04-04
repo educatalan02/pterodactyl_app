@@ -206,7 +206,6 @@ class _ServerPanelState extends State<ServerPanel> {
                     child: TabBarView(
                       children: [
                         Column(
-                          // This is the 'Files' tab
                           children: [
                             Expanded(
                               child: ValueListenableBuilder<String>(
@@ -255,7 +254,82 @@ class _ServerPanelState extends State<ServerPanel> {
                                           onTap: () {
                                             var file =
                                                 fileAndDirectoryNames[index];
-                                            // Rest of your onTap code...
+
+                                            if (file.contains('.')) {
+                                              var fileType = path
+                                                  .extension(file)
+                                                  .substring(1);
+                                              var fileName =
+                                                  path.basename(file);
+
+                                              Get.dialog(
+                                                AlertDialog(
+                                                  title: Text(fileName),
+                                                  content: Column(
+                                                    children: [
+                                                      Expanded(
+                                                          child: TextField(
+                                                        scrollController:
+                                                            _scrollController,
+                                                        controller: _controller,
+                                                        maxLines: null,
+                                                      ))
+                                                    ],
+                                                  ),
+                                                  actions: [
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          downloadFile(
+                                                              "$currentDirectory/$file",
+                                                              file);
+                                                        },
+                                                        icon: const Icon(
+                                                            Icons.download)),
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          updateFileContent(
+                                                              "$currentDirectory/$file",
+                                                              _controller.text);
+                                                        },
+                                                        icon: const Icon(
+                                                            Icons.save)),
+                                                    IconButton(
+                                                        onPressed: () {},
+                                                        icon: const Icon(
+                                                            Icons.delete))
+                                                  ],
+                                                ),
+                                              );
+                                              print(file);
+                                              print(currentDirectory +
+                                                  "/" +
+                                                  file);
+                                              getFileContent(
+                                                      "$currentDirectory/$file")
+                                                  .then((value) {
+                                                _controller.text = value;
+                                                WidgetsBinding.instance
+                                                    .addPostFrameCallback((_) {
+                                                  _scrollController.jumpTo(
+                                                      _scrollController.position
+                                                          .maxScrollExtent);
+                                                });
+                                              });
+                                            } else {
+                                              // open directory
+                                              currentDirectory = path.join(
+                                                  currentDirectory, file);
+                                              fetchAllFiles(currentDirectory)
+                                                  .then((value) {
+                                                setState(() {
+                                                  print(file);
+                                                  fileAndDirectoryNames = value
+                                                      .map((e) =>
+                                                          path.basename(e))
+                                                      .toList();
+                                                });
+                                              });
+                                            }
                                           },
                                         ),
                                       );
@@ -266,14 +340,13 @@ class _ServerPanelState extends State<ServerPanel> {
                             ),
                           ],
                         ),
-                        // Rest of your tabs go here...
+                        
 
-                        Text('Databases'),
-                        Text('Schedules'),
-                        Text('Users'),
-                        Text('Backups'),
-                        Text('Settings'),
-
+                        const Text('Databases'),
+                        const Text('Schedules'),
+                        const Text('Users'),
+                        const Text('Backups'),
+                        const Text('Settings'),
                       ],
                     ),
                   ),
