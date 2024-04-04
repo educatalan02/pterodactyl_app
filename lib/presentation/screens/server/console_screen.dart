@@ -149,7 +149,7 @@ class _ConsoleState extends State<Console> {
               ),
             ),
             TextField(
-              autofocus: true,
+              autofocus: false,
               onSubmitted: (text) {
                 sendCommand();
                 _scrollController.jumpTo(
