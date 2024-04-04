@@ -104,12 +104,15 @@ class _ServerPanelState extends State<ServerPanel> {
             if (snapshot.hasData && !serverIsSuspended) {
               return Column(
                 children: [
-                  _buildResourceCards(snapshot.data!),
-                  TabBar(tabs: _buildTabs()),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TabBar(tabs: _buildTabs()),
+                  ),
                   Expanded(
-                    flex: 4,
+                    flex: 5,
                     child: _buildTabBarView(),
                   ),
+                  _buildResourceCards(snapshot.data!),
                 ],
               );
             } else {
@@ -234,32 +237,29 @@ class _ServerPanelState extends State<ServerPanel> {
         Console(server: widget.server),
         Column(
           children: [
-            Expanded(
-              child: ValueListenableBuilder<String>(
-                valueListenable: ValueNotifier<String>(currentDirectory),
-                builder: (context, value, child) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        IconButton(
-                            onPressed: () {
-                              currentDirectory = path.dirname(currentDirectory);
-                              fetchAllFiles(currentDirectory).then((value) {
-                                setState(() {
-                                  fileAndDirectoryNames = value
-                                      .map((e) => path.basename(e))
-                                      .toList();
-                                });
+            ValueListenableBuilder<String>(
+              valueListenable: ValueNotifier<String>(currentDirectory),
+              builder: (context, value, child) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            currentDirectory = path.dirname(currentDirectory);
+                            fetchAllFiles(currentDirectory).then((value) {
+                              setState(() {
+                                fileAndDirectoryNames =
+                                    value.map((e) => path.basename(e)).toList();
                               });
-                            },
-                            icon: const Icon(Icons.arrow_back)),
-                        Text(currentDirectory),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                            });
+                          },
+                          icon: const Icon(Icons.arrow_back)),
+                      Text(currentDirectory),
+                    ],
+                  ),
+                );
+              },
             ),
             Expanded(
               flex: 4,
