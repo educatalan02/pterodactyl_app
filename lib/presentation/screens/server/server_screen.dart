@@ -35,7 +35,7 @@ class _ServerPanelState extends State<ServerPanel> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 6,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.server.name),
@@ -177,20 +177,16 @@ class _ServerPanelState extends State<ServerPanel> {
                   ),
                   const TabBar(tabs: [
                     Tab(
+                      icon: Icon(Icons.laptop_chromebook),
+                      text: 'Console',
+                    ),
+                    Tab(
                       icon: Icon(Icons.folder),
                       text: 'Files',
                     ),
                     Tab(
-                      icon: Icon(Icons.data_object_sharp),
-                      text: 'Databases',
-                    ),
-                    Tab(
                       icon: Icon(Icons.schedule),
                       text: 'Schedules',
-                    ),
-                    Tab(
-                      icon: Icon(Icons.verified_user_sharp),
-                      text: 'Users',
                     ),
                     Tab(
                       icon: Icon(Icons.backup),
@@ -205,6 +201,7 @@ class _ServerPanelState extends State<ServerPanel> {
                     flex: 4,
                     child: TabBarView(
                       children: [
+                        Console(server: widget.server),
                         Column(
                           children: [
                             Expanded(
@@ -340,11 +337,7 @@ class _ServerPanelState extends State<ServerPanel> {
                             ),
                           ],
                         ),
-                        
-
-                        const Text('Databases'),
                         const Text('Schedules'),
-                        const Text('Users'),
                         const Text('Backups'),
                         const Text('Settings'),
                       ],
@@ -360,7 +353,6 @@ class _ServerPanelState extends State<ServerPanel> {
                   crossAxisCount: 4,
                   children: [
                     Card(
-                      color: Colors.grey[850],
                       child: const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Column(
@@ -369,7 +361,6 @@ class _ServerPanelState extends State<ServerPanel> {
                       ),
                     ),
                     Card(
-                      color: Colors.grey[850],
                       child: const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Column(
@@ -378,7 +369,6 @@ class _ServerPanelState extends State<ServerPanel> {
                       ),
                     ),
                     Card(
-                      color: Colors.grey[850],
                       child: const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Column(
@@ -387,7 +377,6 @@ class _ServerPanelState extends State<ServerPanel> {
                       ),
                     ),
                     Card(
-                      color: Colors.grey[850],
                       child: const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Column(
@@ -401,7 +390,7 @@ class _ServerPanelState extends State<ServerPanel> {
             }
           },
         ),
-        bottomNavigationBar: BottomNavigationBar(
+        /*bottomNavigationBar: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: const Icon(Icons.laptop_chromebook),
@@ -426,7 +415,7 @@ class _ServerPanelState extends State<ServerPanel> {
                           ServerSettings(server: widget.server)));
             }
           },
-        ),
+        ),*/
       ),
     );
   }

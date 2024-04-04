@@ -18,10 +18,27 @@ class Console extends StatefulWidget {
   State<Console> createState() => _ConsoleState();
 }
 
+class ConsoleController extends GetxController {
+  var messages = <String>[].obs;
+
+  void addMessage(String message) {
+    messages.add(message);
+    if (messages.length > 100) {
+      messages.removeRange(0, 99);
+    }
+  
+  }
+
+  void clearMessages() {
+    messages.clear();
+  }
+}
+
 class _ConsoleState extends State<Console> {
   late IOWebSocketChannel _channel;
   List<String> messages = [];
 
+  final ConsoleController consoleController = Get.put(ConsoleController());
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   void connect(String url, String token) {
@@ -38,10 +55,10 @@ class _ConsoleState extends State<Console> {
       Map data = jsonDecode(event);
       if (data["event"] == "console output") {
         setState(() {
-          messages.add(data["args"][0].toString());
+          consoleController.addMessage(data["args"][0].toString());
         });
-        if (messages.length > 100) {
-          messages.removeRange(0, 99);
+        if (consoleController.messages.length > 100) {
+          consoleController.messages.removeRange(0, 99);
         }
         WidgetsBinding.instance.addPostFrameCallback((_) {
           _scrollController.jumpTo(
@@ -102,25 +119,14 @@ class _ConsoleState extends State<Console> {
   @override
   void initState() {
     super.initState();
+    
     fetchServerDetails(widget.server);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          elevation: 0.0,
-          leading: IconButton(
-            onPressed: () {
-              _channel.sink.close();
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back),
-          ),
-          title:  Text(
-            "console".tr,
-            style: const TextStyle(fontWeight: FontWeight.w700),
-          )),
+      
       body: SafeArea(
         child: Column(
           children: [
@@ -131,7 +137,7 @@ class _ConsoleState extends State<Console> {
                   crossAxisAlignment: CrossAxisAlignment
                       .start, // Alinea el texto a la izquierda
                   children: [
-                    for (var message in messages)
+                    for (var message in consoleController.messages)
                       SizedBox(
                         width: double.infinity,
                         child: Text(
