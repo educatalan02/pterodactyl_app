@@ -1,33 +1,23 @@
-import 'dart:ffi';
-
-class Server {
+class Panel {
   late int id = 0;
-  late String socketUrl = '';
 
   late String panelUrl;
 
   late String apiKey;
-  late String serverId;
 
   late String name = '';
-  late String optionalTag = '';
 
-  Server({
-    required this.socketUrl,
+  Panel({
     required this.panelUrl,
     required this.apiKey,
     required this.name,
-    required this.serverId,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'socket': socketUrl,
       'panel': panelUrl,
       'apiKey': apiKey,
       'name': name,
-      'serverId': serverId,
-      'optionalTag': optionalTag,
     };
   }
 }

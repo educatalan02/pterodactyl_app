@@ -51,6 +51,11 @@ dependencies:
   animated_tree_view: ^2.2.0
   dio: ^5.4.2+1
   path_provider: ^2.1.2
+  adaptive_theme: ^3.6.0
+  flex_seed_scheme: ^1.5.0
+  dartactyl: ^1.9.0
+  awesome_icons: ^1.1.0
+  line_awesome_flutter: ^2.0.0
   
 
 dev_dependencies:

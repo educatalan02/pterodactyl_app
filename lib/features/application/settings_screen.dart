@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:pterodactyl_app/presentation/screens/screens.dart';
-import 'package:pterodactyl_app/translations.dart';
 
 class AppSettingsController extends GetxController {
   RxBool isDarkMode = (Get.isDarkMode).obs;
@@ -15,16 +13,12 @@ class AppSettingsController extends GetxController {
     language.value = box.read('language') ?? Get.locale!.languageCode;
     super.onInit();
   }
-
-
-
-  
 }
 
 class AppSettings extends StatelessWidget {
   const AppSettings({super.key});
   AppSettingsController get _controller => Get.put(AppSettingsController());
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +35,6 @@ class AppSettings extends StatelessWidget {
                 onChanged: (bool value) {
                   _controller.isDarkMode.value = value;
 
-                  
                   _controller.box.write('isDarkMode', value);
                   Get.changeThemeMode(value ? ThemeMode.dark : ThemeMode.light);
                 },
