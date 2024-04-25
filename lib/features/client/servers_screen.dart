@@ -5,7 +5,7 @@ import 'package:pterodactyl_app/data/panel.dart';
 import 'package:dartactyl/dartactyl.dart';
 import 'package:pterodactyl_app/features/client/controller/servercontroller.dart';
 import 'package:pterodactyl_app/features/client/server_screen.dart';
-import 'package:pterodactyl_app/features/client/widgets/file_explorer/server_fileexplorer.dart';
+import 'package:pterodactyl_app/features/client/widgets/server_fileexplorer.dart';
 
 import 'package:pterodactyl_app/features/client/widgets/serverpowerbutton.dart';
 
