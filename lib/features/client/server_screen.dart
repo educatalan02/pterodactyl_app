@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pterodactyl_app/data/server_state.dart';
-import 'package:pterodactyl_app/features/client/widgets/server_fileexplorer.dart';
+import 'package:pterodactyl_app/features/client/widgets/file_explorer/server_fileexplorer.dart';
 
 class ServerScreen extends StatelessWidget {
   const ServerScreen({super.key, required this.server});

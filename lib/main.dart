@@ -43,9 +43,7 @@ void main() async {
       ],
       debugShowCheckedModeBanner: false,
       theme: FlexThemeData.light(scheme: FlexScheme.blueM3),
-      // The Mandy red, dark theme.
       darkTheme: FlexThemeData.dark(scheme: FlexScheme.blueM3),
-
       themeMode: GetStorage().read('isDarkMode') == true
           ? ThemeMode.dark
           : ThemeMode.light,
