@@ -4,6 +4,7 @@ import 'package:pterodactyl_app/data/panel.dart';
 
 import 'package:dartactyl/dartactyl.dart';
 import 'package:pterodactyl_app/features/client/controller/servercontroller.dart';
+import 'package:pterodactyl_app/features/client/server_screen.dart';
 
 import 'package:pterodactyl_app/features/client/widgets/serverpowerbutton.dart';
 
@@ -26,7 +27,7 @@ class _ServersState extends State<Servers> {
   void initState() {
     super.initState();
 
-    controller = Get.put(ServerController(getClient()));
+    controller = Get.put(ServerController(widget.panel));
 
     controller.loadServers();
   }
@@ -35,7 +36,7 @@ class _ServersState extends State<Servers> {
   Widget build(BuildContext context) {
     var client = getClient();
 
-    final ServerController controller = Get.put(ServerController(getClient()));
+    final ServerController controller = Get.put(ServerController(widget.panel));
     controller.loadServers();
     return Scaffold(
       appBar: AppBar(
@@ -68,6 +69,9 @@ class _ServersState extends State<Servers> {
                       title: Text(
                         server.server.name,
                       ),
+                      onTap: () {
+                        Get.to(() => ServerScreen(server: server));
+                      },
                     ),
                   );
                 },
