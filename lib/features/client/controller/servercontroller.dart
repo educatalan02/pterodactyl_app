@@ -3,17 +3,11 @@ import 'dart:async';
 import 'package:dartactyl/dartactyl.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:pterodactyl_app/data/panel.dart';
 import 'package:pterodactyl_app/data/server_state.dart';
 
 class ServerController extends GetxController {
   RxList<ServerState> servers = <ServerState>[].obs;
   Timer? timer;
-
-  final Panel panel;
-
-  late PteroClient client = PteroClient.generate(
-      url: panel.panelUrl, apiKey: panel.apiKey);
 
   void refreshServerState(Server server) async {
     var response = await client.getServerResources(serverId: server.uuid);
@@ -23,21 +17,20 @@ class ServerController extends GetxController {
   void updateServerState(Server server, ServerPowerState newState) {
     int index = servers.indexWhere((s) => s.server.uuid == server.uuid);
     if (index != -1) {
-      servers[index] = ServerState(
-          server: server, state: newState, panel: servers[index].panel);
+      servers[index] = ServerState(server: server, state: newState);
     }
   }
 
-  ServerController(this.panel);
+  final PteroClient client;
+
+  ServerController(this.client);
 
   void loadServers() async {
     var response = await client.listServers();
     servers.value = await Future.wait(response.data.map((server) async {
       var state = await client.getServerResources(serverId: server.server.uuid);
       return ServerState(
-          server: server.server,
-          state: state.attributes.currentState,
-          panel: panel);
+          server: server.server, state: state.attributes.currentState);
     }).toList());
   }
 
