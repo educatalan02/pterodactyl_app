@@ -1,5 +1,6 @@
 import 'package:dartactyl/dartactyl.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:pterodactyl_app/data/server_state.dart';
 import 'package:path/path.dart' as path;
 import 'package:pterodactyl_app/features/client/widgets/file_explorer/file_checkbox.dart';
@@ -36,132 +37,138 @@ class _ServerFileExplorerState extends State<ServerFileExplorer> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(10),
+    return Column(
+      children: [
+        ValueListenableBuilder<String>(
+          valueListenable: ValueNotifier<String>(currentDirectory),
+          builder: (context, value, child) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 8.0, top: 4.0),
+              child: Row(
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          currentDirectory = path.dirname(currentDirectory);
+
+                          loadFiles();
+                        });
+                      },
+                      icon: const Icon(Icons.arrow_upward)),
+                  Text(
+                    currentDirectory,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
-        child: Column(
-          children: [
-            ValueListenableBuilder<String>(
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black12),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ValueListenableBuilder<String>(
               valueListenable: ValueNotifier<String>(currentDirectory),
               builder: (context, value, child) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 8.0, top: 4.0),
-                  child: Row(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            setState(() {
-                              currentDirectory = path.dirname(currentDirectory);
+                return FutureBuilder<List<FileObject>>(
+                  future:
+                      loadFiles(), // Asegúrate de que loadFiles() devuelve un Future
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<FileObject>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                          child:
+                              CircularProgressIndicator()); // Muestra un indicador de carga mientras se cargan los archivos
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      // Los archivos se han cargado correctamente
+                      List<FileObject>? files = snapshot.data;
+                      if (checked.isEmpty) {
+                        checked = List<bool>.filled(files!.length, false);
+                      }
+                      return ListView.builder(
+                        itemCount: files!.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            elevation: 0,
+                            child: ListTile(
+                              onTap: () {
+                                if (files[index].isFile) {
+                                  // Si es un archivo, abre el archivo
+                                } else {
+                                  // Si es un directorio, cambia el directorio actual
+                                  setState(() {
+                                    currentDirectory = path.join(
+                                        currentDirectory, files[index].name);
+                                    loadFiles();
+                                  });
+                                }
+                              },
+                              trailing: PopupMenuButton<int>(
+                                icon: const Icon(Icons.more_vert),
+                                itemBuilder: (context) => [
+                                  const PopupMenuItem(
+                                      value: 1, child: Icon(Icons.delete)),
+                                  const PopupMenuItem(
+                                    value: 2,
+                                    child: Icon(Icons.download),
+                                  ),
+                                ],
+                                onSelected: (value) {
+                                  // Aquí puedes manejar la opción seleccionada
+                                  switch (value) {
+                                    case 1:
+                                      getClient().deleteFiles(
+                                        FileBodyListString(
+                                            rootDir: currentDirectory,
+                                            files: [files[index].name]),
+                                        serverId: widget.server.server.uuid,
+                                        onSendProgress: (count, total) {
+                                          if (count == total) {
+                                            loadFiles();
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        "Deleted ${files[index].name}")));
+                                          }
+                                        },
+                                      );
 
-                              loadFiles();
-                            });
-                          },
-                          icon: const Icon(Icons.arrow_back)),
-                      Text(currentDirectory),
-                    ],
-                  ),
+                                      break;
+                                    case 2:
+                                      // Código para la opción 2
+                                      break;
+                                  }
+                                },
+                              ),
+                              leading: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  FileCheckbox(isChecked: checked[index]),
+                                  Icon(files[index].isFile
+                                      ? Icons.file_copy
+                                      : Icons.folder),
+                                ],
+                              ),
+                              title: Text(files[index].name),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
                 );
               },
             ),
-            Expanded(
-              child: ValueListenableBuilder<String>(
-                valueListenable: ValueNotifier<String>(currentDirectory),
-                builder: (context, value, child) {
-                  return FutureBuilder<List<FileObject>>(
-                    future:
-                        loadFiles(), // Asegúrate de que loadFiles() devuelve un Future
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<FileObject>> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                            child:
-                                CircularProgressIndicator()); // Muestra un indicador de carga mientras se cargan los archivos
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        // Los archivos se han cargado correctamente
-                        List<FileObject>? files = snapshot.data;
-                        if (checked.isEmpty) {
-                          checked = List<bool>.filled(files!.length, false);
-                        }
-                        return ListView.builder(
-                          itemCount: files!.length,
-                          itemBuilder: (context, index) {
-                            return Card(
-                              child: ListTile(
-                                onTap: () {
-                                  if (files[index].isFile) {
-                                    // Si es un archivo, abre el archivo
-                                  } else {
-                                    // Si es un directorio, cambia el directorio actual
-                                    setState(() {
-                                      currentDirectory = path.join(
-                                          currentDirectory, files[index].name);
-                                      loadFiles();
-                                    });
-                                  }
-                                },
-                                trailing: PopupMenuButton<int>(
-                                  icon: const Icon(Icons.more_vert),
-                                  itemBuilder: (context) => [
-                                    const PopupMenuItem(
-                                        value: 1, child: Icon(Icons.delete)),
-                                    const PopupMenuItem(
-                                      value: 2,
-                                      child: Icon(Icons.download),
-                                    ),
-                                  ],
-                                  onSelected: (value) {
-                                    // Aquí puedes manejar la opción seleccionada
-                                    switch (value) {
-                                      case 1:
-                                        getClient().deleteFiles(
-                                          FileBodyListString(
-                                              rootDir: currentDirectory,
-                                              files: [files[index].name]),
-                                          serverId: widget.server.server.uuid,
-                                          onSendProgress: (count, total) {
-                                            if (count == total) {
-                                              loadFiles();
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                      content: Text(
-                                                          "Deleted ${files[index].name}")));
-                                            }
-                                          },
-                                        );
-
-                                        break;
-                                      case 2:
-                                        // Código para la opción 2
-                                        break;
-                                    }
-                                  },
-                                ),
-                                leading: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    FileCheckbox(isChecked: checked[index]),
-                                    Icon(files[index].isFile
-                                        ? Icons.file_copy
-                                        : Icons.folder),
-                                  ],
-                                ),
-                                title: Text(files[index].name),
-                              ),
-                            );
-                          },
-                        );
-                      }
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
-        ));
+          ),
+        ),
+      ],
+    );
   }
 
   @override
