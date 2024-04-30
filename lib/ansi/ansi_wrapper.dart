@@ -182,37 +182,63 @@ class AnsiWrapper {
   }
 }
 
-class AnsiTextWidget extends StatelessWidget {
-  final String ansiText;
+class AnsiEscapeText extends StatelessWidget {
+  final String text;
 
-  AnsiTextWidget({required this.ansiText});
+  AnsiEscapeText({required this.text});
 
   @override
   Widget build(BuildContext context) {
-    final textSpans = <TextSpan>[];
-    final regex = RegExp(r'(\x1b\[\d+(;\d+)*m)');
-    var start = 0;
+    List<InlineSpan> spans = [];
 
-    // Divide el texto en segmentos basados en los códigos de escape ANSI
-    for (final match in regex.allMatches(ansiText)) {
-      final plainText = ansiText.substring(start, match.start);
-      if (plainText.isNotEmpty) {
-        textSpans.add(TextSpan(text: plainText));
+    RegExp regex = RegExp(r'\u001b\[\d+m');
+
+    List<String> segments = text.split(
+        regex); // Dividir el texto en segmentos utilizando los códigos de escape
+    Iterable<Match> matches = regex
+        .allMatches(text); // Buscar todos los códigos de escape en el texto
+
+    int matchIndex = 0; // Índice para recorrer los códigos de escape
+
+    for (var segment in segments) {
+      if (segment.isNotEmpty) {
+        spans.add(TextSpan(text: segment));
       }
 
-      start = match.end;
+      if (matchIndex < matches.length) {
+        Match match = matches.elementAt(matchIndex);
+        String escapeCode = match.group(0)!;
+
+        TextStyle style = _getStyleFromEscapeCode(escapeCode);
+        spans.add(TextSpan(
+            text: ' ',
+            style: style)); // Agregar un espacio en blanco con el estilo
+
+        matchIndex++;
+      }
     }
 
-    // Añade el texto restante después del último código de escape ANSI
-    final remainingText = ansiText.substring(start);
-    if (remainingText.isNotEmpty) {
-      textSpans.add(TextSpan(text: remainingText));
+    return RichText(text: TextSpan(children: spans));
+  }
+
+  TextStyle _getStyleFromEscapeCode(String escapeCode) {
+    // Se eliminan los corchetes y se divide el código en función de las letras
+    List<String> codeParts = escapeCode.replaceAll('[', '').split('m');
+
+    // Si hay partes de código válidas
+    if (codeParts.isNotEmpty) {
+      String colorCode = codeParts[0]; // Se obtiene el código de color
+
+      switch (colorCode) {
+        case '36': // Cyan
+          return TextStyle(color: Colors.cyan);
+        case '33': // Amarillo
+          return TextStyle(color: Colors.yellow);
+        default:
+          return TextStyle();
+      }
     }
 
-    return RichText(
-      text: TextSpan(
-        children: textSpans,
-      ),
-    );
+    return TextStyle();
   }
 }

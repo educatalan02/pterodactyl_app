@@ -60,39 +60,45 @@ class _ServerPowerButtonState extends State<ServerPowerButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 40.0, // Cambia esto al ancho que desees
-      height: 40.0, // Cambia esto al alto que desees
-      decoration: BoxDecoration(
-        color: _state == ServerPowerState.running
-            ? Colors.green[100]
-            : Colors.red[100],
-        border: Border.all(
-          width: 2,
-          color: _state == ServerPowerState.running
-              ? Colors.green[400]!
-              : Colors.red[400]!,
-        ),
-        shape: BoxShape.circle,
-      ),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Align(
-              alignment: Alignment.center,
-              child: IconButton(
-                padding: EdgeInsets.zero,
-                iconSize: 24,
-                onPressed: null,
-                icon: Icon(
-                  getIconData(),
-                  color: getIconColor(),
+    return ValueListenableBuilder<ServerPowerState>(
+      valueListenable: widget.server.stateNotifier,
+      builder: (context, value, child) {
+        _state = value;
+        return Container(
+          width: 40.0, // Cambia esto al ancho que desees
+          height: 40.0, // Cambia esto al alto que desees
+          decoration: BoxDecoration(
+            color: _state == ServerPowerState.running
+                ? Colors.green[100]
+                : Colors.red[100],
+            border: Border.all(
+              width: 2,
+              color: _state == ServerPowerState.running
+                  ? Colors.green[400]!
+                  : Colors.red[400]!,
+            ),
+            shape: BoxShape.circle,
+          ),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    iconSize: 24,
+                    onPressed: null,
+                    icon: Icon(
+                      getIconData(),
+                      color: getIconColor(),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

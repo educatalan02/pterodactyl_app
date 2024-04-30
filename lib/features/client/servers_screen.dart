@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:pterodactyl_app/data/panel.dart';
 
 import 'package:dartactyl/dartactyl.dart';
+import 'package:pterodactyl_app/data/server_state.dart';
 import 'package:pterodactyl_app/features/client/controller/servercontroller.dart';
 import 'package:pterodactyl_app/features/client/server_screen.dart';
+import 'package:pterodactyl_app/features/client/widgets/console.dart';
 
 import 'package:pterodactyl_app/features/client/widgets/serverpowerbutton.dart';
 
@@ -51,30 +53,22 @@ class _ServersState extends State<Servers> {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             return Obx(() {
-              return ListView.builder(
-                itemCount: controller.servers.length,
-                itemBuilder: (context, index) {
-                  var server = controller.servers[index];
-
-                  return Card(
-                    child: ListTile(
-                      leading: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.star_rate),
-                      ),
-                      trailing: ServerPowerButton(
-                          server: server,
-                          client: client,
-                          controller: controller),
-                      title: Text(
-                        server.server.name,
-                      ),
-                      onTap: () {
-                        Get.to(() => ServerScreen(server: server));
-                      },
+              return Column(
+                children: [
+                  ...controller.favoriteServers.map(
+                      (server) => buildServerCard(server, client, controller)),
+                  if (controller.favoriteServers.isNotEmpty)
+                    Divider(
+                      color: Colors.grey[500],
+                      thickness: 1,
+                      height: 20,
                     ),
-                  );
-                },
+                  const SizedBox(height: 4),
+                  ...controller.servers
+                      .where((s) => !controller.favoriteServers.contains(s))
+                      .map((server) =>
+                          buildServerCard(server, client, controller)),
+                ],
               );
             });
           }
@@ -82,4 +76,38 @@ class _ServersState extends State<Servers> {
       ),
     );
   }
+}
+
+Widget buildServerCard(
+    ServerState server, PteroClient client, ServerController controller) {
+  return Card(
+    color: Colors.grey[200],
+    child: ListTile(
+      leading: IconButton(
+        onPressed: () {
+          if (controller.favoriteServers.contains(server)) {
+            controller.removeFromFavorites(server);
+          } else {
+            controller.addToFavorites(server);
+          }
+        },
+        icon: Icon(
+          controller.favoriteServers.contains(server)
+              ? Icons.star
+              : Icons.star_border,
+          color: controller.favoriteServers.contains(server)
+              ? Colors.yellow
+              : null,
+        ),
+      ),
+      trailing: ServerPowerButton(
+          server: server, client: client, controller: controller),
+      title: Text(
+        server.server.name,
+      ),
+      onTap: () {
+        Get.to(() => ServerScreen(server: server));
+      },
+    ),
+  );
 }

@@ -1,8 +1,9 @@
 import 'package:awesome_icons/awesome_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:pterodactyl_app/data/server_state.dart';
-import 'package:pterodactyl_app/features/client/widgets/console/console.dart';
+import 'package:pterodactyl_app/features/client/widgets/console.dart';
 import 'package:pterodactyl_app/features/client/widgets/file_explorer/server_fileexplorer.dart';
 
 class ServerScreen extends StatelessWidget {
@@ -29,13 +30,13 @@ class ServerScreen extends StatelessWidget {
         items: [
           PersistentBottomNavBarItem(
             icon: const Icon(Icons.code),
-            title: ("Console"),
+            title: ("console".tr),
             activeColorPrimary: Colors.blue,
             inactiveColorPrimary: Colors.grey,
           ),
           PersistentBottomNavBarItem(
             icon: const Icon(FontAwesomeIcons.file),
-            title: ("Files"),
+            title: ("files".tr),
             activeColorPrimary: Colors.blue,
             inactiveColorPrimary: Colors.grey,
           ),
