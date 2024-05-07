@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class FileCheckbox extends StatefulWidget {
   final bool isChecked;
 
-  FileCheckbox({required this.isChecked});
+  const FileCheckbox({super.key, required this.isChecked});
 
   @override
-  _FileCheckboxState createState() => _FileCheckboxState();
+  FileCheckboxState createState() => FileCheckboxState();
 }
 
-class _FileCheckboxState extends State<FileCheckbox> {
+class FileCheckboxState extends State<FileCheckbox> {
   bool? isChecked;
 
   @override

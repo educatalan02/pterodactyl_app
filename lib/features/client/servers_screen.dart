@@ -6,7 +6,6 @@ import 'package:dartactyl/dartactyl.dart';
 import 'package:pterodactyl_app/data/server_state.dart';
 import 'package:pterodactyl_app/features/client/controller/servercontroller.dart';
 import 'package:pterodactyl_app/features/client/server_screen.dart';
-import 'package:pterodactyl_app/features/client/widgets/console.dart';
 
 import 'package:pterodactyl_app/features/client/widgets/serverpowerbutton.dart';
 
@@ -55,15 +54,14 @@ class _ServersState extends State<Servers> {
             return Obx(() {
               return Column(
                 children: [
+                  const SizedBox(height: 6),
                   ...controller.favoriteServers.map(
                       (server) => buildServerCard(server, client, controller)),
                   if (controller.favoriteServers.isNotEmpty)
-                    Divider(
-                      color: Colors.grey[500],
+                    const Divider(
                       thickness: 1,
-                      height: 20,
+                      height: 14,
                     ),
-                  const SizedBox(height: 4),
                   ...controller.servers
                       .where((s) => !controller.favoriteServers.contains(s))
                       .map((server) =>
@@ -81,7 +79,6 @@ class _ServersState extends State<Servers> {
 Widget buildServerCard(
     ServerState server, PteroClient client, ServerController controller) {
   return Card(
-    color: Colors.grey[200],
     child: ListTile(
       leading: IconButton(
         onPressed: () {

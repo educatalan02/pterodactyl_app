@@ -58,6 +58,10 @@ dependencies:
   line_awesome_flutter: ^2.0.0
   persistent_bottom_nav_bar: ^5.0.2
   ansix: ^0.3.2
+  logger: ^2.2.0
+  google_fonts: ^6.2.1
+  custom_navigation_bar: ^0.8.2
+  code_editor: ^2.1.0
   
 
 dev_dependencies:

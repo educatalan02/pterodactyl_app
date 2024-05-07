@@ -6,6 +6,7 @@ import 'package:dartactyl/websocket.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/async.dart' as p;
 import 'package:get/get.dart';
+import 'package:logger/web.dart';
 import 'package:pterodactyl_app/ansi/ansi_wrapper.dart';
 import 'package:pterodactyl_app/data/server_state.dart';
 
@@ -74,7 +75,6 @@ class _ConsoleState extends State<Console> {
                   .jumpTo(scrollController.position.maxScrollExtent);
             }
           });
-          print(controller.messages.last);
         });
 
         controller.webSocket?.powerState.listen((event) {
@@ -98,23 +98,15 @@ class _ConsoleState extends State<Console> {
       return websocket;
     }
     return controller.webSocket!;
-
-    //await client.getServerWebsocket(serverId: widget.server.server.identifier);
   }
 
   @override
   Widget build(BuildContext context) {
-    getWebsocket().then((value) => {
-          value.powerState.listen((event) {
-            print(event);
-          })
-        });
-
     return FutureBuilder<ServerWebsocket>(
       future: getWebsocket(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == p.ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
@@ -126,26 +118,17 @@ class _ConsoleState extends State<Console> {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      TextButton.icon(
+                      FilledButton.tonalIcon(
                           onPressed: () {
                             getWebsocket().then((value) => {
                                   value
                                       .setPowerState(ServerPowerAction.restart),
                                 });
                           },
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24.0),
-                              ),
-                            ),
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.blue[50]),
-                          ),
                           icon: const Icon(Icons.restart_alt),
-                          label: Text('restart'.tr,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w500))),
+                          label: Text(
+                            'restart'.tr,
+                          )),
                       const SizedBox(width: 10),
                       if (controller.powerState.value ==
                           ServerPowerState.running)
@@ -163,11 +146,11 @@ class _ConsoleState extends State<Console> {
                                 ),
                               ),
                               backgroundColor:
-                                  MaterialStateProperty.all(Colors.red[300]),
+                                  MaterialStateProperty.all(Colors.red),
                             ),
-                            label: Text('stop'.tr,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500)))
+                            label: Text(
+                              'stop'.tr,
+                            ))
                       else
                         TextButton.icon(
                             onPressed: () {
@@ -176,21 +159,23 @@ class _ConsoleState extends State<Console> {
                                         .setPowerState(ServerPowerAction.start),
                                   });
                             },
-                            icon: const Icon(Icons.play_arrow),
+                            icon: const Icon(
+                              Icons.play_arrow,
+                            ),
                             style: ButtonStyle(
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(24.0),
                                 ),
                               ),
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.green[300]),
+                              backgroundColor: MaterialStateProperty.all(
+                                  const Color.fromARGB(255, 69, 184, 73)),
                             ),
-                            label: Text('start'.tr,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500))),
+                            label: Text(
+                              'start'.tr,
+                            )),
                       const SizedBox(width: 10),
-                      TextButton.icon(
+                      FilledButton.tonalIcon(
                           onPressed: () {
                             controller.clearMessages();
                           },
@@ -200,8 +185,6 @@ class _ConsoleState extends State<Console> {
                                 borderRadius: BorderRadius.circular(24.0),
                               ),
                             ),
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.blue[100]),
                           ),
                           icon: const Icon(Icons.delete),
                           label: Text('clear'.tr,
@@ -215,8 +198,7 @@ class _ConsoleState extends State<Console> {
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        border: Border.all(color: Colors.black12),
+                        border: Border.all(),
                         borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(16.0),
                           bottomRight: Radius.circular(16.0),
@@ -243,32 +225,26 @@ class _ConsoleState extends State<Console> {
                               },
                             ),
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black12),
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(16.0),
-                                bottomRight: Radius.circular(16.0),
-                              ),
-                            ),
-                            child: TextField(
-                              controller: textController,
-                              decoration: InputDecoration(
-                                hintText: 'type_a_command'.tr,
-                                border: InputBorder.none,
-                                suffixIcon: IconButton(
-                                  icon: const Icon(Icons.send),
-                                  onPressed: () {
-                                    controller.webSocket
-                                        ?.sendCommand(textController.text);
-                                    textController.clear();
-                                    FocusScope.of(context).unfocus();
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
                         ],
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: textController,
+                    decoration: InputDecoration(
+                      hintText: 'type_a_command'.tr,
+                      border: InputBorder.none,
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.send),
+                        onPressed: () {
+                          controller.webSocket
+                              ?.sendCommand(textController.text);
+                          textController.clear();
+                          FocusScope.of(context).unfocus();
+                        },
                       ),
                     ),
                   ),

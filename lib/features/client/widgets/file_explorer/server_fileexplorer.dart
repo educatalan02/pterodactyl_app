@@ -1,9 +1,12 @@
 import 'package:dartactyl/dartactyl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:pterodactyl_app/data/server_state.dart';
 import 'package:path/path.dart' as path;
 import 'package:pterodactyl_app/features/client/widgets/file_explorer/file_checkbox.dart';
+import 'package:pterodactyl_app/features/client/widgets/file_explorer/file_editor.dart';
 
 class ServerFileExplorer extends StatefulWidget {
   ServerFileExplorer({super.key, required this.server});
@@ -70,7 +73,7 @@ class _ServerFileExplorerState extends State<ServerFileExplorer> {
             padding: const EdgeInsets.all(16.0),
             child: Container(
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.black12),
+                border: Border.all(),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: ValueListenableBuilder<String>(
@@ -101,7 +104,12 @@ class _ServerFileExplorerState extends State<ServerFileExplorer> {
                               child: ListTile(
                                 onTap: () {
                                   if (files[index].isFile) {
-                                    // Si es un archivo, abre el archivo
+                                    Get.to(() => FileEditorWidget(
+                                          fileName: path.join(currentDirectory,
+                                              files[index].name),
+                                          client: getClient(),
+                                          server: widget.server.server,
+                                        ));
                                   } else {
                                     // Si es un directorio, cambia el directorio actual
                                     setState(() {
