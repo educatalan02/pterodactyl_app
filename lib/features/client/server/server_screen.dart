@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:pterodactyl_app/data/server_state.dart';
-import 'package:pterodactyl_app/features/client/widgets/console.dart';
-import 'package:pterodactyl_app/features/client/widgets/file_explorer/server_fileexplorer.dart';
+import 'package:pterodactyl_app/features/client/server/widgets/console.dart';
+import 'package:pterodactyl_app/features/client/server/widgets/file_explorer/server_fileexplorer.dart';
+import 'package:pterodactyl_app/features/client/server/widgets/more_actions.dart';
 
 class ServerScreen extends StatefulWidget {
   const ServerScreen({super.key, required this.server});
@@ -23,7 +24,7 @@ class ServerScreenState extends State<ServerScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -40,6 +41,7 @@ class ServerScreenState extends State<ServerScreen>
           children: [
             Console(server: widget.server),
             ServerFileExplorer(server: widget.server),
+            MoreActions(server: widget.server)
           ],
         ),
         bottomNavigationBar: CustomNavigationBar(
@@ -59,6 +61,11 @@ class ServerScreenState extends State<ServerScreen>
             CustomNavigationBarItem(
               icon: const Icon(FontAwesomeIcons.folder),
               title: Text("files".tr, style: const TextStyle(fontSize: 12)),
+            ),
+            CustomNavigationBarItem(
+              icon: const Icon(Icons.more),
+              title:
+                  Text("more_actions".tr, style: const TextStyle(fontSize: 12)),
             ),
           ],
         ));

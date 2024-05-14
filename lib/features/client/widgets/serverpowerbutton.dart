@@ -2,7 +2,7 @@ import 'package:dartactyl/dartactyl.dart';
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:pterodactyl_app/data/server_state.dart';
-import 'package:pterodactyl_app/features/client/controller/servercontroller.dart';
+import 'package:pterodactyl_app/features/client/controller/serverscontroller.dart';
 
 class ServerPowerButton extends StatefulWidget {
   final ServerState server;
@@ -16,10 +16,10 @@ class ServerPowerButton extends StatefulWidget {
       required this.controller});
 
   @override
-  _ServerPowerButtonState createState() => _ServerPowerButtonState();
+  ServerPowerButtonState createState() => ServerPowerButtonState();
 }
 
-class _ServerPowerButtonState extends State<ServerPowerButton> {
+class ServerPowerButtonState extends State<ServerPowerButton> {
   late ServerPowerState _state;
 
   Color getIconColor() {
