@@ -3,11 +3,12 @@ import 'package:get/get.dart';
 import 'package:pterodactyl_app/data/server_state.dart';
 import 'package:pterodactyl_app/features/client/server/backups_screen.dart';
 import 'package:pterodactyl_app/features/client/server/databases_screen.dart';
-import 'package:pterodactyl_app/features/client/server/schedules_screen.dart';
+import 'package:pterodactyl_app/features/client/server/startup_screen.dart';
+import 'package:pterodactyl_app/features/client/server/widgets/activity_screen.dart';
 
 class MoreActions extends StatelessWidget {
   final ServerState server;
-  MoreActions({super.key, required this.server});
+  const MoreActions({super.key, required this.server});
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +58,7 @@ class MoreActions extends StatelessWidget {
               child: ListTile(
                 title: Text('network'.tr),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => const AppearanceSettings()));
-                },
+                onTap: () {},
               ),
             ),
             Card(
@@ -67,7 +66,7 @@ class MoreActions extends StatelessWidget {
                 title: Text('startup'.tr),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => const AppearanceSettings()));
+                  Get.to(() => StartupScreen(server: server));
                 },
               ),
             ),
@@ -75,9 +74,7 @@ class MoreActions extends StatelessWidget {
               child: ListTile(
                 title: Text('settings'.tr),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => const AppearanceSettings()));
-                },
+                onTap: () {},
               ),
             ),
             Card(
@@ -85,7 +82,7 @@ class MoreActions extends StatelessWidget {
                 title: Text('activity_logs'.tr),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => const AppearanceSettings()));
+                  Get.to(() => ActivityScreen(server: server));
                 },
               ),
             ),

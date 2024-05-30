@@ -1,7 +1,6 @@
 import 'package:awesome_icons/awesome_icons.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:pterodactyl_app/data/server_state.dart';
 import 'package:pterodactyl_app/features/client/server/widgets/console.dart';

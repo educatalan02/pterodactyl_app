@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/get_navigation.dart';
 import 'package:pterodactyl_app/data/server_state.dart';
 import 'package:pterodactyl_app/features/client/server/controller/databases_controller.dart';
 import 'package:flutter/services.dart';

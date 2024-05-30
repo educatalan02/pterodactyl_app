@@ -1,14 +1,14 @@
-import 'dart:io';
-
-import 'package:ansix/ansix.dart';
+import 'dart:async';
 import 'package:dartactyl/dartactyl.dart';
 import 'package:dartactyl/websocket.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/async.dart' as p;
+
 import 'package:get/get.dart';
-import 'package:logger/web.dart';
+import 'package:logger/logger.dart';
 import 'package:pterodactyl_app/ansi/ansi_wrapper.dart';
+
 import 'package:pterodactyl_app/data/server_state.dart';
+import 'package:flutter/src/widgets/async.dart' as async;
 
 class ConsoleController extends GetxController {
   var messages = <String>[].obs;
@@ -26,7 +26,7 @@ class ConsoleController extends GetxController {
     if (messages.length > 100) {
       messages.removeRange(0, 99);
     }
-    messages.add(removeAnsiCodes(message));
+    messages.add((message));
   }
 
   void clearMessages() {
@@ -44,10 +44,10 @@ class Console extends StatefulWidget {
   final ServerState server;
 
   @override
-  _ConsoleState createState() => _ConsoleState();
+  ConsoleState createState() => ConsoleState();
 }
 
-class _ConsoleState extends State<Console> {
+class ConsoleState extends State<Console> {
   bool listenerAdded = false;
   final scrollController = ScrollController();
   late ConsoleController controller;
@@ -67,8 +67,8 @@ class _ConsoleState extends State<Console> {
 
       if (!listenerAdded) {
         controller.webSocket?.logs.listen((event) {
-          print(event.message.toString());
-          controller.messages.add(removeAnsiCodes(event.message.toString()));
+          Logger().d(event.message.toString());
+          controller.messages.add((event.message.toString()));
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (scrollController.hasClients) {
               scrollController
@@ -105,7 +105,7 @@ class _ConsoleState extends State<Console> {
     return FutureBuilder<ServerWebsocket>(
       future: getWebsocket(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == p.ConnectionState.waiting) {
+        if (snapshot.connectionState == async.ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
@@ -214,14 +214,11 @@ class _ConsoleState extends State<Console> {
                               controller: scrollController,
                               itemBuilder: (context, index) {
                                 return Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 8.0, right: 8.0, top: 4.0),
-                                  child: Text(
-                                    controller.messages[index],
-                                    style:
-                                        TextStyle(color: Colors.blue.shade900),
-                                  ),
-                                );
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, right: 8.0, top: 4.0),
+                                    child: AnsiColorText(
+                                      text: controller.messages[index],
+                                    ));
                               },
                             ),
                           ),

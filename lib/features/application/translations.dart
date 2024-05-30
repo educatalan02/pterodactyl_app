@@ -1,6 +1,11 @@
 import 'package:get/get_navigation/src/root/internacionalization.dart';
 
 class AppTranslations extends Translations {
+
+
+
+
+
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
@@ -61,6 +66,7 @@ class AppTranslations extends Translations {
           'copied': 'Copied',
           'copied_to_clipboard': 'Copied to clipboard',
         },
+        
         'es_ES': {
           'settings': 'Ajustes',
           'darkMode': 'Modo Oscuro',

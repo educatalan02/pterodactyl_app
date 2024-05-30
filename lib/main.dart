@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
 import 'package:pterodactyl_app/features/application/addserver_screen.dart';
 import 'package:pterodactyl_app/features/application/menu_screen.dart';
 import 'package:pterodactyl_app/features/application/splash_screen.dart';

@@ -13,6 +13,7 @@ class ServerController extends GetxController {
   Timer? timer;
 
   final Panel panel;
+  ServerController(this.panel);
 
   late PteroClient client =
       PteroClient.generate(url: panel.panelUrl, apiKey: panel.apiKey);
@@ -49,8 +50,6 @@ class ServerController extends GetxController {
     }
   }
 
-  ServerController(this.panel);
-
   void loadServers() async {
     var response = await client.listServers();
     var serverStates = await Future.wait(response.data.map((server) async {
@@ -72,7 +71,6 @@ class ServerController extends GetxController {
   void onClose() {
     timer?.cancel();
     super.onClose();
-
     saveFavoriteServers();
   }
 

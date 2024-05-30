@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pterodactyl_app/data/panel.dart';
-
 import 'package:dartactyl/dartactyl.dart';
 import 'package:pterodactyl_app/data/server_state.dart';
 import 'package:pterodactyl_app/features/client/controller/serverscontroller.dart';
 import 'package:pterodactyl_app/features/client/server/server_screen.dart';
-
 import 'package:pterodactyl_app/features/client/widgets/serverpowerbutton.dart';
 
 class Servers extends StatefulWidget {

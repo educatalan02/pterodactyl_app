@@ -1,16 +1,13 @@
 import 'package:dartactyl/dartactyl.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pterodactyl_app/data/server_state.dart';
 import 'package:path/path.dart' as path;
 import 'package:pterodactyl_app/features/client/server/widgets/file_explorer/file_checkbox.dart';
 import 'package:pterodactyl_app/features/client/server/widgets/file_explorer/file_editor.dart';
 
 class ServerFileExplorer extends StatefulWidget {
-  ServerFileExplorer({super.key, required this.server});
+  const ServerFileExplorer({super.key, required this.server});
 
   final ServerState server;
 
@@ -177,6 +174,7 @@ class _ServerFileExplorerState extends State<ServerFileExplorer> {
                                 ),
                               );
                             }
+                            return null;
                           },
                         );
                       }

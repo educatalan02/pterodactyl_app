@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:pterodactyl_app/features/application/addserver_screen.dart';
+import 'package:pterodactyl_app/features/application/edit_server_screen.dart';
 import 'package:pterodactyl_app/features/application/settings_screen.dart';
 import 'package:pterodactyl_app/features/application/controller/panelcontroller.dart';
 import 'package:pterodactyl_app/features/client/servers_screen.dart';
@@ -49,6 +49,10 @@ class MainMenu extends StatelessWidget {
                       Get.to(() => Servers(
                             panel: serverController.panels[index],
                           ));
+                    },
+                    onLongPress: () {
+                      Get.to(() => EditServerScreen(
+                          panel: serverController.panels[index]));
                     },
                   ),
                 ),
