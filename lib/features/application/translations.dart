@@ -1,11 +1,6 @@
 import 'package:get/get_navigation/src/root/internacionalization.dart';
 
 class AppTranslations extends Translations {
-
-
-
-
-
   @override
   Map<String, Map<String, String>> get keys => {
         'en_US': {
@@ -65,8 +60,9 @@ class AppTranslations extends Translations {
           'month': 'Month',
           'copied': 'Copied',
           'copied_to_clipboard': 'Copied to clipboard',
+          'memory': 'Memory',
+          'cpu': 'CPU',
         },
-        
         'es_ES': {
           'settings': 'Ajustes',
           'darkMode': 'Modo Oscuro',
@@ -125,6 +121,8 @@ class AppTranslations extends Translations {
           'month': 'Mes',
           'copied': 'Copiado',
           'copied_to_clipboard': 'Copiado al portapapeles',
+          'memory': 'RAM',
+          'cpu': 'CPU',
         },
       };
 }

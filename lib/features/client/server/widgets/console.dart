@@ -9,11 +9,16 @@ import 'package:pterodactyl_app/ansi/ansi_wrapper.dart';
 
 import 'package:pterodactyl_app/data/server_state.dart';
 import 'package:flutter/src/widgets/async.dart' as async;
+import 'package:socket_io_client/socket_io_client.dart';
 
 class ConsoleController extends GetxController {
   var messages = <String>[].obs;
 
   var powerState = ServerPowerState.offline.obs;
+
+  var cpu_usage = 0.0.obs;
+  var memory_usage = 0.0.obs;
+  var memory_limit = 0.0.obs;
 
   ServerWebsocket? webSocket;
 
@@ -66,8 +71,18 @@ class ConsoleState extends State<Console> {
       controller.webSocket = value;
 
       if (!listenerAdded) {
+        controller.webSocket?.stats.listen((event) {
+          controller.powerState.value = event.state;
+          Logger().d("Stats: ${event.network}");
+          controller.cpu_usage.value = event.cpuAbsolute;
+          controller.memory_usage.value =
+              event.memoryBytes / 1024 / 1024 / 1024;
+          controller.memory_limit.value =
+              event.memoryLimitBytes / 1024 / 1024 / 1024;
+        });
         controller.webSocket?.logs.listen((event) {
           Logger().d(event.message.toString());
+
           controller.messages.add((event.message.toString()));
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (scrollController.hasClients) {
@@ -75,10 +90,6 @@ class ConsoleState extends State<Console> {
                   .jumpTo(scrollController.position.maxScrollExtent);
             }
           });
-        });
-
-        controller.webSocket?.powerState.listen((event) {
-          controller.powerState.value = event;
         });
 
         listenerAdded = true;
@@ -114,85 +125,140 @@ class ConsoleState extends State<Console> {
           return Obx(
             () => Column(
               children: [
+                // ...
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      FilledButton.tonalIcon(
-                          onPressed: () {
-                            getWebsocket().then((value) => {
-                                  value
-                                      .setPowerState(ServerPowerAction.restart),
-                                });
-                          },
-                          icon: const Icon(Icons.restart_alt),
-                          label: Text(
-                            'restart'.tr,
-                          )),
-                      const SizedBox(width: 10),
-                      if (controller.powerState.value ==
-                          ServerPowerState.running)
-                        TextButton.icon(
-                            onPressed: () {
-                              getWebsocket().then((value) => {
-                                    value.setPowerState(ServerPowerAction.stop),
-                                  });
-                            },
-                            icon: const Icon(Icons.stop),
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(24.0),
-                                ),
-                              ),
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.red),
+                  child: LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                      if (constraints.maxWidth < 600) {
+                        // Ajusta este valor según tus necesidades
+                        // En dispositivos móviles, muestra solo los iconos
+                        return Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.restart_alt),
+                              onPressed: () {
+                                getWebsocket().then((value) => {
+                                      value.setPowerState(
+                                          ServerPowerAction.restart),
+                                    });
+                              },
                             ),
-                            label: Text(
-                              'stop'.tr,
-                            ))
-                      else
-                        TextButton.icon(
-                            onPressed: () {
-                              getWebsocket().then((value) => {
-                                    value
-                                        .setPowerState(ServerPowerAction.start),
-                                  });
-                            },
-                            icon: const Icon(
-                              Icons.play_arrow,
+                            Obx(() {
+                              if (controller.powerState.value ==
+                                  ServerPowerState.running) {
+                                return IconButton(
+                                  icon: const Icon(Icons.stop),
+                                  onPressed: () {
+                                    getWebsocket().then((value) => {
+                                          value.setPowerState(
+                                              ServerPowerAction.stop),
+                                        });
+                                  },
+                                );
+                              } else {
+                                return IconButton(
+                                  icon: const Icon(Icons.play_arrow),
+                                  onPressed: () {
+                                    getWebsocket().then((value) => {
+                                          value.setPowerState(
+                                              ServerPowerAction.start),
+                                        });
+                                  },
+                                );
+                              }
+                            }),
+                            const Spacer(),
+                            Card(
+                              child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(
+                                      "${"cpu".tr}: ${controller.cpu_usage.value.toStringAsFixed(2)}%")),
                             ),
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(24.0),
-                                ),
-                              ),
-                              backgroundColor: MaterialStateProperty.all(
-                                  const Color.fromARGB(255, 69, 184, 73)),
-                            ),
-                            label: Text(
-                              'start'.tr,
-                            )),
-                      const SizedBox(width: 10),
-                      FilledButton.tonalIcon(
-                          onPressed: () {
-                            controller.clearMessages();
-                          },
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24.0),
+                            const SizedBox(width: 8),
+                            Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(
+                                    "${"memory".tr}: ${controller.memory_usage.value.toStringAsFixed(2)}/${controller.memory_limit.value.toStringAsFixed(2)}GB"),
                               ),
                             ),
-                          ),
-                          icon: const Icon(Icons.delete),
-                          label: Text('clear'.tr,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w500))),
-                    ],
+                          ],
+                        );
+                      } else {
+                        // En dispositivos más grandes, muestra los iconos y el texto
+                        return Row(
+                          children: [
+                            FilledButton.tonalIcon(
+                              onPressed: () {
+                                getWebsocket().then((value) => {
+                                      value.setPowerState(
+                                          ServerPowerAction.restart),
+                                    });
+                              },
+                              icon: const Icon(Icons.restart_alt),
+                              label: Text('restart'.tr),
+                            ),
+                            Obx(() {
+                              if (controller.powerState.value ==
+                                  ServerPowerState.running) {
+                                return FilledButton.tonalIcon(
+                                  onPressed: () {
+                                    getWebsocket().then((value) => {
+                                          value.setPowerState(
+                                              ServerPowerAction.stop),
+                                        });
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.red[800]),
+                                  ),
+                                  icon: const Icon(Icons.stop),
+                                  label: Text('stop'.tr),
+                                );
+                              } else {
+                                return FilledButton.tonalIcon(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.green[800]),
+                                  ),
+                                  onPressed: () {
+                                    getWebsocket().then((value) => {
+                                          value.setPowerState(
+                                              ServerPowerAction.start),
+                                        });
+                                  },
+                                  icon: const Icon(Icons.play_arrow),
+                                  label: Text('start'.tr),
+                                );
+                              }
+                            }),
+                            // ...
+
+                            const Spacer(),
+                            Card(
+                              child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(
+                                      "${"cpu".tr}: ${controller.cpu_usage.value.toStringAsFixed(2)}%")),
+                            ),
+                            const SizedBox(width: 8),
+                            Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Text(
+                                    "${"memory".tr}: ${controller.memory_usage.value.toStringAsFixed(2)}/${controller.memory_limit.value.toStringAsFixed(2)}GB"),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                    },
                   ),
                 ),
+// ...,
+
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
