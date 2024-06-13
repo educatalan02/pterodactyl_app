@@ -200,6 +200,7 @@ class ConsoleState extends State<Console> {
                               icon: const Icon(Icons.restart_alt),
                               label: Text('restart'.tr),
                             ),
+                            SizedBox(width: 8),
                             Obx(() {
                               if (controller.powerState.value ==
                                   ServerPowerState.running) {
@@ -217,7 +218,8 @@ class ConsoleState extends State<Console> {
                                   icon: const Icon(Icons.stop),
                                   label: Text('stop'.tr),
                                 );
-                              } else {
+                              } else if (controller.powerState.value ==
+                                  ServerPowerState.offline) {
                                 return FilledButton.tonalIcon(
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
@@ -232,6 +234,8 @@ class ConsoleState extends State<Console> {
                                   icon: const Icon(Icons.play_arrow),
                                   label: Text('start'.tr),
                                 );
+                              } else {
+                                return SizedBox.shrink();
                               }
                             }),
                             // ...

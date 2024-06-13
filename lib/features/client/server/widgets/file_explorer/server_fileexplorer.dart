@@ -1,10 +1,15 @@
 import 'package:dartactyl/dartactyl.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pterodactyl_app/data/server_state.dart';
 import 'package:path/path.dart' as path;
 import 'package:pterodactyl_app/features/client/server/widgets/file_explorer/file_checkbox.dart';
 import 'package:pterodactyl_app/features/client/server/widgets/file_explorer/file_editor.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ServerFileExplorer extends StatefulWidget {
   const ServerFileExplorer({super.key, required this.server});
@@ -156,7 +161,27 @@ class _ServerFileExplorerState extends State<ServerFileExplorer> {
 
                                           break;
                                         case 2:
-                                          // Código para la opción 2
+                                          // Descarga el archivo
+                                          getClient()
+                                              .getFileDownloadUrl(
+                                                  serverId:
+                                                      widget.server.server.uuid,
+                                                  file: files[index].name)
+                                              .then((value) async {
+                                            final url = value.attributes.url;
+
+                                            var dio = Dio();
+                                            try {
+                                              var dir =
+                                                  await getApplicationDocumentsDirectory();
+                                              await dio.download(url.toString(),
+                                                  '${dir?.path}/${files[index].name}');
+                                            } catch (e) {
+                                              Logger().e(
+                                                  'Error downloading file: $e');
+                                            }
+                                          });
+
                                           break;
                                       }
                                     },

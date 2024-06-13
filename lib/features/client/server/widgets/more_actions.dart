@@ -45,7 +45,7 @@ class MoreActions extends StatelessWidget {
                 },
               ),
             ),*/
-            Card(
+            /*Card(
               child: ListTile(
                 title: Text('backups'.tr),
                 trailing: const Icon(Icons.chevron_right),
@@ -53,15 +53,15 @@ class MoreActions extends StatelessWidget {
                   Get.to(() => BackupsScreen(server: server));
                 },
               ),
-            ),
-            Card(
+            ),*/
+            /*Card(
               child: ListTile(
                 title: Text('network'.tr),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {},
               ),
-            ),
-            Card(
+            ),*/
+            /*Card(
               child: ListTile(
                 title: Text('startup'.tr),
                 trailing: const Icon(Icons.chevron_right),
@@ -69,14 +69,14 @@ class MoreActions extends StatelessWidget {
                   Get.to(() => StartupScreen(server: server));
                 },
               ),
-            ),
-            Card(
+            ),*/
+            /*Card(
               child: ListTile(
                 title: Text('settings'.tr),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {},
               ),
-            ),
+            ),*/
             Card(
               child: ListTile(
                 title: Text('activity_logs'.tr),

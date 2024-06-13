@@ -104,19 +104,117 @@ En entornos donde el idioma predeterminado no es ni español ni inglés, la proy
 En resumen, la proyección del proyecto en entornos que no son el español se enfoca en proporcionar una experiencia de usuario inclusiva y adaptable, con el inglés como idioma predeterminado y la opción de cambiar el idioma según las preferencias individuales de los usuarios. Esto asegura que la aplicación pueda ser utilizada eficazmente por una amplia variedad de usuarios en diferentes regiones y con distintos idiomas.
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
-# Documento de Acuerdo del Proyecto
+# **Documento de Acuerdo del Proyecto**
 
-### Requisitos Funcionales y No Funcionales
+### **Requisitos Funcionales y No Funcionales**
+<br>
 
-[Detalla los requisitos funcionales y no funcionales de tu proyecto.]
+#### **Requisitos Funcionales**
+<br>
 
-### Tareas
+ 1. Autenticación de Usuario
+     - Permite a los usuarios identificarse mediante las API Keys proporcionadas por el panel Pterodactyl.
+     - Recuerda las sesiones de autenticación.
 
-[Listado de las tareas a realizar para completar el proyecto.]
+ 2. Múltiples Usuarios
+     - Permite poner varios usuarios/credenciales.
+     - Permite poner las credenciales de varias instalaciones pterodactyl a la vez desde la misma app.
+
+ 3. Gestión de Consola
+     - Permite a los usuarios acceder y enviar comandos a la consola del servidor.
+     - Debe mostrar en tiempo real la salida de la consola.
+     - Wrapper de Códigos de Escape ANSI
+         - Implementa un wrapper que interpreta los códigos de escape ANSI utilizados por Pterodactyl.
+         - El wrapper traduce los códigos de colores ANSI a los colores equivalentes en Flutter, permitiendo que la salida de la consola mantenga su formato de colores original cuando se visualiza desde la app.
+         - Esta funcionalidad asegura que los colores y estilos de texto utilizados en la consola web se reflejen correctamente en la app, mejorando la experiencia de usuario y facilitando la administración de los servidores.
+
+ 4. Gestión de Ficheros
+     - Los usuarios pueden navegar por el sistema de archivos del servidor. (No es mediante FTP) 
+     - Permite editar y eliminar archivos.
+ 5. Editor de Ficheros
+     - Incluye un editor de ficheros integrado que automáticamente detecta el tipo de archivo (xml,json,yaml, etc.).
+     - Dependiendo de la sintaxis del archivo detectado, el editor aplica un esquema de colores predefinido para resaltar la sintaxis de dicho fichero, mejorando la legibilidad y facilitando la edición de los ficheros.
+
+ 6. Visualización del Estado del Servidor
+     - La aplicación muestra el estado actual del servidor (encendido,apagado).
+     - Muestra estadísticas del servidor (CPU & Memoria).
+ 7. Control del Servidor
+     - El usuario puede iniciar,detener y reiniciar el servidor desde la aplicación.
+ 8. Logs 
+     - La aplicación permite al usuario acceder a los logs del servidor mediante el explorador de archivos.
+ 9.  Gestión de Bases de Datos
+     - Permite la visualización de las credenciales de acceso.
+   <br><br>
+### **Requisitos NO Funcionales**
+1. Gestión de ficheros
+    - No permite descargar ficheros.
+    - No permite operaciones bulk/múltiples.
+2. Gestión de Bases de Datos
+    - No permite la gestión de la base de datos.
+3. Gestión de Schedules
+    - No permite la gestión de Schedules/Programaciones.
+4. Gestión de Parámetros de Inicio
+    - No permite cambiar los parámetros de inicio del servidor.
+  
+<br><br><br>
+
+### **Tareas**
+<br>
+
+#### **Fase de Análisis y Planificación**
+
+  1. Revisión de Requisitos
+    - Investigación sobre Pterodactyl y su API.
+  2. Definición de Funcionalidades
+    -  Edición de ficheros.
+    -  Autenticación mediante API KEYS.
+    -  Permite múltiples API KEYS (incluído diferentes instalaciones).
+    -  Consola en vivo y usable.
+    -  Visualización de directorios y ficheros.
+    -  Eliminación de ficheros.
+    -  Reiniciar/Iniciar el servidor.
+    -  Multi lenguaje.
+    -  Modo oscuro y modo claro.
+<br>
+
+#### **Fase de Desarrollo**
+   3. Configuración  del Entorno de Desarrollo
+       - Instalación y configuración de Android Studio, Flutter y Visual Studio Code.
+       - Configuración de GIT & Github para controlar las versiones.
+   4. Desarrollo de la conexión con la API
+        - Implementación de métodos para autenticarse y realizar operaciones básicas con la API de Pterodactyl.
+        - Pruebas iniciales de conectividad.
+   5. Implementación de Funcionalidades Principales
+        - Gestión de Consola:
+            - Desarrollo del Wrapper para códigos de escape ANSI.
+            - Traducción de colores ANSI a colores de Flutter.
+            - Uso de Websockets para recibir la consola en tiempo real.
+        - Gestión de Archivos:
+            - Navegación por el sistema de archivos del servidor.
+            - Implementación de operaciones CRUD (actualizar, leer, eliminar) en ficheros.
+        - Control del Servidor:
+            - Funcionalidades para iniciar, detener y reiniciar el servidor. 
+   6. Implementación del Editor de Ficheros
+        - Detección automática del tipo de archivo (XML, JSON, YAML, ETC...).
+        - Aplicación de esquemas de colores predefinidos para la sintaxis.
+  <br>
+### **Fase de Pruebas**
+
+   1. Desarrollo de Pruebas Unitarias:
+        - Pruebas específicas para verificar la correcta funcionalidad de la conexión con la API de Pterodactyl.
+            - Resultado: APTO 
+      - 
+       
+
+
+      
+
+
 
 ### Metodología a Seguir
 
-[Describe la metodología que seguirás para llevar a cabo el proyecto.]
+
+
 
 ### Planificación Temporal de Tareas
 

@@ -66,6 +66,7 @@ dependencies:
   highlight: ^0.7.0
   flutter_highlight: ^0.7.0
   timeago: ^3.6.1
+  url_launcher: ^6.3.0
   
 
 dev_dependencies:

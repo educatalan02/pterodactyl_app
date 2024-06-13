@@ -31,7 +31,7 @@ class ActivityScreen extends StatelessWidget {
                     children: [
                       Text(timeago.format(log.timestamp)),
                       Text(log.properties['file'] ??
-                          ''), // Añade tu nuevo widget aquí
+                          ''), 
                     ],
                   ),
                 ),

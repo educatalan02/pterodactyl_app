@@ -29,7 +29,7 @@ class ActivityController extends GetxController {
       activityLogs.value = value.data.map((e) => e.attributes).toList();
 
       Logger().d(activityLogs);
-      //update();
+
     });
   }
 }

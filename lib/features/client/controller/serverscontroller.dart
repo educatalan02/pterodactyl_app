@@ -63,7 +63,6 @@ class ServerController extends GetxController {
           state: state.attributes.currentState,
           panel: panel);
     }).toList());
-
     servers.value = serverStates.whereType<ServerState>().toList();
   }
 
