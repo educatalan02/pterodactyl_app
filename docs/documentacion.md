@@ -6,8 +6,9 @@
 - **Ciclo:** Desarrollo de Aplicaciones Multiplataforma
 - **Curso:** 2º DAM
 - **Fecha:** 17/06/2024
-- **Centro:** IES Segundo de Chomón
-![Logo del Centro](chomon.png)
+- **Centro:** ![LogoCentro](./chomon.png)
+
+![LogoApp](./logo.png)
 
 ### **Datos del Alumno**
 
@@ -18,33 +19,12 @@
 <br>
 <br>
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+
 <br><br>
 
 # **Documento Descripción del Proyecto**
 
-### Contexto del Proyecto
+### **Contexto del Proyecto**
 
 La aplicación que he desarrollado está construida utilizando Flutter de Google, una tecnología que permite crear aplicaciones multiplataforma de manera eficiente. Esta aplicación surge como una necesidad, ya que a pesar de que Pterodactyl, una plataforma de hosting de código abierto, ofrece una API para su gestión, actualmente no existe ninguna aplicación activa que permita acceder a esta plataforma desde dispositivos móviles.
 
@@ -107,11 +87,7 @@ En resumen, la proyección del proyecto en entornos que no son el español se en
 # **Documento de Acuerdo del Proyecto**
 
 ### **Requisitos Funcionales y No Funcionales**
-<br>
-
 #### **Requisitos Funcionales**
-<br>
-
  1. Autenticación de Usuario
      - Permite a los usuarios identificarse mediante las API Keys proporcionadas por el panel Pterodactyl.
      - Recuerda las sesiones de autenticación.
@@ -135,6 +111,8 @@ En resumen, la proyección del proyecto en entornos que no son el español se en
      - Incluye un editor de ficheros integrado que automáticamente detecta el tipo de archivo (xml,json,yaml, etc.).
      - Dependiendo de la sintaxis del archivo detectado, el editor aplica un esquema de colores predefinido para resaltar la sintaxis de dicho fichero, mejorando la legibilidad y facilitando la edición de los ficheros.
 
+<br><br><br><br><br>
+
  6. Visualización del Estado del Servidor
      - La aplicación muestra el estado actual del servidor (encendido,apagado).
      - Muestra estadísticas del servidor (CPU & Memoria).
@@ -156,10 +134,9 @@ En resumen, la proyección del proyecto en entornos que no son el español se en
 4. Gestión de Parámetros de Inicio
     - No permite cambiar los parámetros de inicio del servidor.
   
-<br><br><br>
+<br><br>
 
 ### **Tareas**
-<br>
 
 #### **Fase de Análisis y Planificación**
 
@@ -175,7 +152,7 @@ En resumen, la proyección del proyecto en entornos que no son el español se en
     -  Reiniciar/Iniciar el servidor.
     -  Multi lenguaje.
     -  Modo oscuro y modo claro.
-<br>
+<br><br><br><br><br><br><br><br><br><br><br><br>
 
 #### **Fase de Desarrollo**
    3. Configuración  del Entorno de Desarrollo
@@ -197,97 +174,599 @@ En resumen, la proyección del proyecto en entornos que no son el español se en
    6. Implementación del Editor de Ficheros
         - Detección automática del tipo de archivo (XML, JSON, YAML, ETC...).
         - Aplicación de esquemas de colores predefinidos para la sintaxis.
-  <br>
+  <br><br><br>
 ### **Fase de Pruebas**
 
    1. Desarrollo de Pruebas Unitarias:
         - Pruebas específicas para verificar la correcta funcionalidad de la conexión con la API de Pterodactyl.
             - Resultado: APTO 
-      - 
+        - Verificación del correcto funcionamiento del wrapper de códigos de escape ANSI.
+            - Resultado: APTO
+2. Desarrollo de pruebas de Integración:
+    - Creación de pruebas que verifican la interacción entre los módulos de la aplicación. (Consola, Gestor de ficheros a través de la API).
+        - Resultado: APTO
+    - Verificación de la correcta interpretación y traducción de códigos de escape ANSI.
+        - Resultado: APTO
+3. Desarrollo de Pruebas de Sistema:
+    - Pruebas de principio a fin, que cubren todas las funcionalidades de la app, desde la autenticación hasta la gestión de servidores y edición de archivos.
+        - Resultado: APTO
+4. Desarrollo de Pruebas de Rendimiento:
+    - Evaluado el rendimiento de la aplicación, sobre todo con los websockets. Asegurando que no se abre varias veces la misma conexión.
+        - Resultado: APTO
+5. Desarrollo de Pruebas de Interfaz de Usuario:
+    - Comprobado que la aplicación responde sin delay. (Depende de la conexión a Internet)
+        - Resultado: APTO
+
+
        
 
 
       
+### **Presupuesto**
+
+#### Coste de Programador Junior
+ - Tarifa Horaria de Programador Junior: 15€/hora.
+ - Total Horas de Trabajo: 87 horas.
+ - Coste Total del Trabajo del Programador: 87 horas x 15€/hora = 1305€
+
+#### Coste de Equipos y Cursos
+ - Coste de la Tablet: 200€
+ - Coste del Cursillo: 15€
+
+#### Coste Total:
+ - Coste Total del Programador: 1305€
+ - Coste total de la Tablet y Cursillo: 200€ + 15€ = 215€
+
+### **Resumen del Presupuesto**
+ - Trabajo del Programador Junior: 1305€
+ - Tablet: 200€
+ - Cursillo Udemy: 15€
+ - **Total: 1305€ + 215€ = 1520€**
 
 
+### **Análisis de Riesgos**
 
-### Metodología a Seguir
+El desarrollo de la aplicación móvil para la gestión de servidores a través de la API de Pterodactyl ha presentado ciertos desafíos y riesgos. Los principales riesgos identificados fueron:
 
+1. **Entender la API de Pterodactyl**:
+    - **Riesgo**: La documentación de la API de Pterodactyl es escasa, lo que dificulta la comprensión y correcta implementación de sus funcionalidades.
+    - **Mitigación**: Realización de pruebas continuas para asegurar el correcto funcionamiento de las llamadas a la API.
 
+2. **Aplicación de la API de Pterodactyl**:
+    - **Riesgo**: Aplicar correctamente las funcionalidades de la API en la aplicación móvil.
+    - **Mitigación**: Desarrollo modular de la aplicación, permitiendo realizar pruebas unitarias e integrales de cada módulo para asegurar su correcto funcionamiento.
+<br><br><br><br>
+3. **Escalabilidad de la Aplicación**:
+    - **Riesgo**: La necesidad de que la aplicación sea escalable para futuras expansiones sin necesidad de grandes modificaciones en el código existente.
+    - **Mitigación**: Diseño modular de la aplicación, facilitando la adición de nuevas funcionalidades de Pterodactyl sin necesidad de tocar el código existente. Uso de buenas prácticas de programación y patrones de diseño que promuevan la escalabilidad.
 
+### **Estrategias de Mitigación**
 
-### Planificación Temporal de Tareas
+- **Modularidad**: La aplicación ha sido desarrollada de manera modular, lo que permite añadir nuevas funcionalidades o realizar cambios sin afectar el resto del código.
+- **Pruebas Continuas**: Realización de pruebas continuas durante todo el proceso de desarrollo para identificar y corregir errores de manera temprana. Incluye prueba y error hasta hacer funcionar todo.
 
-[Establece un cronograma detallado de las tareas y su duración.]
+### **Conclusión**
 
-### Presupuesto
+A pesar de los riesgos y desafíos presentados, se han implementado estrategias efectivas para mitigar estos riesgos, logrando una aplicación funcional y escalable. El enfoque modular asegura que futuras ampliaciones y mejoras puedan realizarse de manera eficiente y sin contratiempos.
 
-[Detalla los gastos, ingresos y beneficios esperados del proyecto.]
-
-### Contrato/Pliego de Condiciones
-
-[Incluye el contrato o las condiciones del proyecto, si los hay.]
-
-### Análisis de Riesgos
-
-[Identifica y analiza los posibles riesgos del proyecto.]
 
 ## Documento de Análisis y Diseño
 
-### Modelado de Datos
 
-[Describe el modelado de datos utilizado en tu proyecto.]
+### Modelo de datos Panel
+```dart
+class Panel {
+  late int id = 0;
+  late String panelUrl;
+  late String apiKey;
+  late String name = '';
 
-### Análisis y Diseño del Sistema Funcional
+  Panel({
+    required this.panelUrl,
+    required this.apiKey,
+    required this.name,
+  });
 
-[Explica el análisis y diseño del sistema funcional de tu proyecto.]
+  Map<String, dynamic> toMap() {
+    return {
+      'panelUrl': panelUrl,
+      'apiKey': apiKey,
+      'name': name,
+    };
+  }
+}
+```
+<br><br>
+El modelo de datos `Panel` representa la configuración de un panel en la aplicación, y sus atributos principales son:
+ - **id:** Identificador único del panel (se inicializa en 0 por defecto).
+ - **panelUrl:** URL del panel de administración de Pterodactyl.
+ - **apiKey:** Clave de API para autenticarse y realizar operaciones a través de la API de Pterodactyl.
+ - **name:** Nombre del panel. 
 
-### Análisis y Diseño de la Interfaz de Usuario
+ #### **Métodos**
 
-[Describe cómo se diseñó la interfaz de usuario de tu proyecto.]
+- Constructor: El constructor requiere `panelUrl`,`apiKey` y `name` como parámetros para crear una instancia del panel.
+- toMap(): Convierte la instancia del panel en un mapa de claves y valores, lo cual me sirve para guardarlo en SQLite.
 
-### Diseño de la Arquitectura de la Aplicación
+<br>
 
-#### Tecnologías/Herramientas Usadas
+### Modelo de datos ServerState
 
-[Enumera y describe las tecnologías y herramientas utilizadas en tu proyecto.]
+```dart
+class ServerState {
+  ServerPowerState state;
 
-#### Arquitectura de Componentes
+  late ValueNotifier<ServerPowerState> stateNotifier = ValueNotifier(state);
 
-[Describe la arquitectura de componentes de tu aplicación.]
+  Server server;
 
-## Documento de Implementación e Implantación del Sistema
+  Panel panel;
 
-### Implementación
+  ServerState({required this.state, required this.server, required this.panel});
+}
+```
+El modelo de datos `ServerState` representa el estado del servidor y sus atributos para poder acceder a la información a través de la API.
 
-[Detalla cómo se implementó tu proyecto.]
+ - **state:** Representa el estado del servidor ('ServerPowerState'), (Iniciado,Parado,etc...).
+ - **stateNotifier::** Es el notificador de valores para el estado del servidor, premite actualizar la interfaz de usuario en respuesta a cambios en el estado.
+ - **server:** Objeto que representa al servidor. (Proviene de la librería Dartactyl)
+ - **panel:** Objeto `Panel` que contiene la configuración del panel de administración.
 
-### Pruebas
 
-[Describe las pruebas realizadas y sus resultados.]
+### **Análisis y Diseño del Sistema Funcional**
+La aplicación se ha construido usando el framework GetX y sigue la metodología MVC (Modelo-Vista-Controlador). A continuación, se presenta un ejemplo de cómo se ha implementado la actualización del contenido mediante `Obx` de GetX, lo cual permite que las interfaces (UI) se actualicen automáticamente cuando las variables observables cambian.
 
-## Documento de Cierre
+<br>
 
-### Documento de Instalación y Configuración
+#### **Implementación de la Vista con GetX**
+```dart
+return Scaffold(
+  appBar: AppBar(
+    title: const Text('Pterodactyl App'),
+    actions: [
+      IconButton(
+        icon: const Icon(Icons.settings),
+        onPressed: () {
+          Get.to(const AppSettings());
+        },
+      ),
+    ],
+  ),
+  body: Center(
+    child: Obx( // Observable de GetX
+      () => ListView.builder(
+        itemCount: serverController.panels.length,
+        padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.03,
+          vertical: 10,
+        ),
+        itemBuilder: (BuildContext context, int index) {
+          return SizedBox(
+            child: Card(
+              child: ListTile(
+                leading: const Icon(
+                  Icons.cloud,
+                ),
+                title: Text(
+                  serverController.panels[index].name,
+                ),
+                subtitle: Text(
+                  serverController.panels[index].panelUrl,
+                ),
+                onTap: () {
+                  Get.to(() => Servers(
+                    panel: serverController.panels[index],
+                  ));
+                },
+                onLongPress: () {
+                  Get.to(() => EditServerScreen(
+                    panel: serverController.panels[index],
+                  ));
+                },
+              ),
+            ),
+          );
+        },
+      ),
+    ),
+  ),
+  floatingActionButton: FloatingActionButton(
+    child: const Icon(Icons.add),
+    onPressed: () {
+      Get.to(() => AddServer());
+      serverController.fetchPanels(); // Actualiza la lista de servidores después de añadir un nuevo servidor
+    },
+  ),
+);
+```
+#### **Explicación del Código**
+ - AppBar:
+    - Contiene el título de la aplicación y un botón de configuración que navega a la pantalla de configuraciones.
+- Body: 
+    - Utiliza `Obx` para observar cambios en `serverController.panels`. Cuando la lista de servidores cambia, la vista se actualiza automáticamente.
+    - `ListView.builder` genera una lista de paneles con elementos interactivos (`ListTile`).
+- ListTile:
+    - Muestra el nombre y la URL del panel.
+    - Tiene dos interacciones:
+        - onTap: Navega a la pantalla de servidores (`Servers`) con el panel seleccionado.
+        - onLongPress: Navega a la pantalla de edición del servidor (`EditServerScreen`) con el panel seleccionado.
+- FloatingActionButton:
+    - Al presionarlo, navega a la pantalla de añadir un nuevo servidor (`AddServer`) y actualiza la lista de paneles (`serverController.fetchPanels`).
 
-[Instrucciones para instalar y configurar tu proyecto.]
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
-### Manual de Usuario
+### **Implementación del Controlador con GetX**
 
-[Manual detallado para que los usuarios puedan utilizar tu aplicación.]
+```dart
+class PanelController extends GetxController {
+  var panels = <Panel>[].obs; // observable para el Obx()
 
-### Resultados Obtenidos y Conclusiones
+  @override
+  void onInit() {
+    super.onInit();
+    fetchPanels();
+  }
 
-[Presenta los resultados obtenidos y las conclusiones de tu proyecto.]
+  void fetchPanels() async {
+    final Database db = await openDatabase(
+      join(await getDatabasesPath(), 'panel_apis.db'),
+    );
 
-### Diario de Bitácora
+    final List<Map<String, dynamic>> maps = await db.query('panel_apis');
 
-[Registra las actividades realizadas durante el desarrollo del proyecto.]
+    panels.value = List.generate(maps.length, (i) {
+      return Panel(
+        panelUrl: maps[i]['panel'],
+        apiKey: maps[i]['apiKey'],
+        name: maps[i]['name'],
+      );
+    });
+  }
+}
+```
+#### **Explicación del Código**
+ - Clase `PanelController`:
+    - Extiende `GetxController` para gestionar el estado de los paneles.
+    - `panels`: Es una lista observable de tipo `Panel`, que se actualiza automáticamente cuando cambia su contenido.
+- Método `onInit`:
+    - Llama a `fetchPanels()` cuando se inicializa el controlador. Esto asegura que los paneles se carguen al inicio de la aplicación.
+- Método `fetchPanels()`:
+    - `async`: Indica que es una función asíncrona que realiza operaciones de E/S.
+    - Abre una base de datos SQLite llamada `panel_apis.db` ubicada en el directorio de bases de datos predeterminado del dispositivo.
+    - Ejecuta una consulta para obtener todos los registros de la tabla `panel_apis`.
+    - Convierte los resultados de la consulta en objetos `Panel` y los asigna a `panels.value`, lo que automáticamente notifica a los widgets que dependen de `panels` para que se actualicen.
 
-## Bibliografía
+<br><br><br>
 
-[Lista de todas las fuentes consultadas para tu proyecto.]
+### **Conclusión de GetX**
 
-## Anexos
+El uso de GetX y la metodología MVC me ha permitido desarrollar una app estructurada y mantenible, con una interfaz de usuario reactiva y una navegación eficiente. Esta combinación de tecnologías me asegura que la aplicación pueda adaptarse fácilmente a futuras necesidades y cambios.
 
-[Cualquier material adicional que sea relevante para tu proyecto.]
+
+### **Wrapper de ANSI**
+He implementado un wrapper personalizado para manejar códigos de escape ANSI en Flutter utilizando una expresión regular (`RegEx`) que detecta los códigos de escape ANSI con la siguiente expresión: `r'\x1B\[\d+m'`.
+Posteriormente, he creado un widget personalizado que renderiza texto con colores dependiendo de los códigos de escape de ANSI presentes en el texto. Esta solución la he desarrollado por la falta de librerías en Flutter que soporten directamente la representación de widgets de texto con códigos de escape ANSI. Las librerías disponibles generalmente se limitan a mostrar texto con códigos de escape ANSI en la consola de depuración, sin soporte para widgets de texto en la interfaz de usuario de Flutter.
+
+
+
+
+
+
+
+### **Tecnologías/Herramientas Usadas**
+
+Durante el desarrollo de la aplicación Pterodactyl App, se han utilizado diversas tecnologías y herramientas para garantizar un desarrollo eficiente y efectivo:
+
+
+
+  
+- **Dart**: Lenguaje de programación utilizado en Flutter para escribir el código de la lógica de la aplicación y de la interfaz de usuario.
+
+- **MVC (Modelo-Vista-Controlador)**: Metodología de diseño de software utilizada para separar la lógica de negocio (Controlador), la presentación (Vista) y los datos (Modelo), facilitando la organización y mantenimiento del código.
+
+- **GitHub Desktop y Git**: Herramientas de control de versiones utilizadas para gestionar el código fuente, realizar seguimiento de cambios y colaborar en equipo a través de repositorios en GitHub.
+
+- **Android Studio y Visual Studio Code**: Entornos de desarrollo integrados (IDEs) ampliamente utilizados para desarrollar aplicaciones Flutter/Dart, proporcionando herramientas avanzadas de depuración, edición y gestión de proyectos.
+
+- **JavaScript**: Utilizado para probar y interactuar con la API de Pterodactyl, aprovechando su versatilidad y facilidad de integración en aplicaciones web y scripts de prueba.
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+- **Flutter**: Framework de Google para construir interfaces de usuario nativas multiplataforma en dispositivos móviles, web y escritorio desde un solo código base.
+    - Librerías usadas:
+        - cupertino_icons: ^1.0.2
+        - web_socket_channel: ^2.4.0
+        - http: ^1.2.0
+        - flutter_hooks: ^0.20.5
+        - socket_io_client: ^2.0.3+1
+        - sqflite: ^2.3.2
+        - sqflite_common_ffi: ^2.3.2+1
+        - path: ^1.8.3
+        - shimmer: ^3.0.0
+        - provider: ^6.1.2
+        - flex_color_scheme: ^7.3.1
+        - get: ^4.6.6
+        - get_storage: ^2.1.1
+        - another_flutter_splash_screen: ^1.2.0
+        - animated_tree_view: ^2.2.0
+        - dio: ^5.4.2+1
+        - path_provider: ^2.1.2
+        - adaptive_theme: ^3.6.0
+        - flex_seed_scheme: ^1.5.0
+        - dartactyl: ^1.9.0
+        - awesome_icons: ^1.1.0
+        - line_awesome_flutter: ^2.0.0
+        - persistent_bottom_nav_bar: ^5.0.2
+        - ansix: ^0.3.2
+        - logger: ^2.2.0
+        - google_fonts: ^6.2.1
+        - custom_navigation_bar: ^0.8.2
+        - code_editor: ^2.1.0
+        - flutter_code_editor: ^0.3.1
+        - highlight: ^0.7.0
+        - flutter_highlight: ^0.7.0
+        - timeago: ^3.6.1
+        - url_launcher: ^6.3.0
+
+Estas tecnologías y herramientas han sido fundamentales para el desarrollo exitoso de Pterodactyl App, asegurando una aplicación robusta, eficiente y fácil de mantener.
+
+<br><br><br><br>
+
+## **Documento de Cierre**
+
+### **Documento de Instalación y Configuración**
+
+Para comenzar a trabajar con la aplicación Pterodactyl App, es necesario configurar adecuadamente el entorno de desarrollo. A continuación se detallan los pasos necesarios:
+
+1. **Instalación de Herramientas**
+
+   - **Flutter**: Instalar Flutter es el primer paso. Puedes seguir las instrucciones detalladas en [flutter.dev](https://flutter.dev/docs/get-started/install) para tu sistema operativo específico.
+   
+   - **Android Studio / Visual Studio Code**: Se recomienda utilizar Android Studio o Visual Studio Code como entornos de desarrollo integrados (IDEs) para Flutter. Ambos son compatibles con Flutter y ofrecen herramientas avanzadas para el desarrollo de aplicaciones móviles. (Android Studio es obligatorio para tener Android SDK).
+   
+   - **Git**: Git se utiliza para la gestión de versiones del código fuente. Instala Git desde [git-scm.com](https://git-scm.com/downloads) si aún no lo tienes.
+
+2. **Configuración del Proyecto**
+
+   - Clona el repositorio de GitHub de Pterodactyl App usando Git:
+     ```bash
+     git clone https://github.com/educatalan02/pterodactyl_app.git
+     ```
+
+   - Abre el proyecto en tu IDE preferido (Android Studio o Visual Studio Code).
+
+3. **Instalación de Dependencias**
+
+   - Ejecuta el siguiente comando en la terminal dentro del directorio de tu proyecto para instalar todas las dependencias especificadas en `pubspec.yaml`:
+     ```bash
+     flutter pub get
+     ```
+
+### **Configuración de la Aplicación**
+
+Una vez que el entorno de desarrollo esté configurado, solo hay que iniciar la aplicación Pterodactyl App:
+
+```bash
+flutter run
+```
+     
+<br><br><br>
+  
+# **Manual de Usuario**
+
+## **Creamos una API Key en un Panel Pterodactyl**
+
+Accedemos a un hosting Pterodactyl y navegamos hacia nuestro perfil.
+
+![PrimeraFoto](./img/crear_api_key/PrimeraFoto_Ir_Perfil.png)
+
+Navegamos hasta el TAB `API Credentials`.
+
+![SegundaFoto](./img/crear_api_key/SegundaFoto_Rodeado_API_CREDENTIALS.png)
+
+<br><br>
+<br><br><br><br>
+
+
+
+
+
+Ponemos un alias a la API KEY, en el parámetro `description` y clickamos en `CREATE`.
+
+![TerceraFoto](./img/crear_api_key/TerceraFoto_Rodeado_TextField_Click_Boton.png)
+
+Ahora nos aparecerá nuestra API KEY. (Guardarla porque no se puede visualizar otra vez).
+
+![CuartaFoto](./img/crear_api_key/CuartaFoto_Rodeado_Close.png)
+
+<br><br><br><br><br><br><br><br><br><br><br>
+
+
+## **Abrimos la app en nuestro dispositivo**
+
+Abrimos la aplicación, por defecto viene en inglés.
+
+![AbrirApp](./img/app/InicioApp.png)
+
+Clickamos en ajustes
+![Settings](./img/app/AjustesBoton.png)
+
+<br><br><br>
+<br><br><br>
+
+Aquí cambiamos el modo oscuro/claro.
+
+![SwitchTheme](./img/app/DarkMode_SwitchOff.png)
+
+Modo oscuro
+
+![SwitchTheme](./img/app/DarkModeSwitchOn.png)
+
+<br><br><br><br><br><br><br><br>
+
+Idioma de la App
+
+![Idioma](./img/app/LanguageSelectorEnglish.png)
+
+![Idioma](./img/app/LanguageSelectorDisplay.png)
+![Idioma](./img/app/LanguageSelectorSpanish.png)
+
+
+
+Desde la pantalla inicial le damos al botón de añadir panel.
+![PantallaInicio_AñadirPanel](./img/app/PantallaInicio_AñadirPanel.png)
+
+Rellenamos todos los credenciales obtenidos de Pterodactyl.
+
+![AñadirDatosPanel](./img/app/AñadirPanel.png)
+
+<br><br><br><br><br><br>
+
+Después de añadir el panel, clickamos en el panel añadido.
+
+![ClickPanel](./img/app/PanelClick.png)
+
+Aquí tenemos los servidores que contiene dicho panel con las credenciales.
+
+![ServersList](./img/app/NonFavouriteServer.png)
+
+<br><br><br><br><br><br><br>
+
+Podemos añadir servidores a favoritos, y aparecerán siempre en la sección de arriba.
+
+![ServerListFavourite](./img/app/FavouritedServer.png)
+
+El icono de la derecha significa el estado actual del servidor (Se actualiza cada 15 segundos por motivos de rendimiento).
+
+![ServerListStatus](./img/app/ServerStatus.png)
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+Accedemos al servidor, pulsando el mismo.
+
+Aqui muestra la consola en tiempo real, usando el wrapper ansi para los colores.
+![ServerIn](./img/app/ServerConsoleWithAnsi.png)
+
+Escribimos un comando y le damos al botón de enviar.
+![ServerCmd](./img/app/ConsoleCommandSender.png)
+![ServerCmdSent](./img/app/CommandSent.png)
+
+Aqui los consumos del servidor en tiempo real.
+![ServerStats](./img/app/ServerStats.png)
+
+Aqui los botones, cuando solo está el de Reiniciar. Significa que hay un proceso de inicio/cierre ejecutándose. (En este caso se muestra el de Iniciar, porque el servidor está apagado.)
+
+![ServerButtons](./img/app/ServerButtonsOff.png)
+
+![ServerOff](./img/app/ServerStatusOff.png)
+
+Deslizamos hacia la derecha la pantalla, y nos lleva al TAB `Archivos`
+![ServerTabArchivos](./img/app/ServerArchivosTab.png)
+
+
+
+Entramos en la carpeta `Logs` al clickar encima.
+![ServerLogsFolder](./img/app/ServerFilesDirectoryBar.png)
+
+<br><br><br>
+
+Le damos a los 3 puntitos de un fichero. Y salen 2 opciones, eliminar archivo y descargar (Descargar no funciona).
+![Server3Dots](./img/app/Server3dotsButton.png)
+
+Le damos a eliminar.
+![ServerDeleteFile](./img/app/DeleteButtonFile.png)
+
+(Hay que salir del directorio y entrar de nuevo para notar los cambios)
+![ServerDeletedFile](./img/app/DeletedFile.png)
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+Vamos atrás con la flechita hacia arriba.
+Y nos devuelve a una ruta anterior.
+Ahí clickamos en un fichero y nos lo abre para editarlo/leerlo.
+![ServerEditFile](./img/app/ClickEditFileExample.png)
+![ServerEditedFile](./img/app/Edit%20ExampleServer.sh.png)
+Si escribimos, se guarda instantáneamente.
+![ServerFileEdit2](./img/app/Editing%20File.png)
+
+Salimos, y buscamos un fichero XML y otro JSON para observar el formato y la sintáxis que muestra el editor.
+![ServerFileEditJSON](./img/app/FileSyntaxDetectorJson.png)
+![ServerFileEditXML](./img/app/FileSyntaxDetector.png)
+
+
+Ahora salimos del editor, y nos vamos al TAB `Más acciones`.
+Ahí tenemos dos opciones, si clickamos en Bases de Datos, veremos información de conexión sobre las bases de datos asignadas al servidor.
+
+![MoreActions](./img/app/More_actions_tab.png)
+
+![DBNull](./img/app/BasesDatos_Vacio.png)
+En este caso, existe una base de datos. Si pulsamos encima se abre un menú con la información.
+![DBNotNull](./img/app/BasesDatos_Existe.png)
+
+Al pinchar en uno de los datos, se copia dicha info en el portapapeles.
+![DBData](./img/app/BasesDatosInfoCopiar.png)
+
+![DBDataF](./img/app/BasesDatosInfoCerrar.png)
+Si le damos al botón de eliminar, aparece un diálogo para confirmar. De esta manera preveemos de missclicks.
+![DBEliminarBtn](./img/app/BaseDatosEliminar.png)
+
+![DBEliminada](./img/app/BaseDatosEliminada.png)
+
+Si salimos de las bases de datos. Podemos entrar en los Registros de actividad.
+![RegistrosActividad](./img/app/RegistroActividad.png)
+
+<br><br><br><br><br><br><br><br><br><br>
+
+Y aquí muestra toda la actividad que hay en el servidor (Básicamente son registros de todo lo que los usuarios hacen sobre el servidor).
+![RegistrosActividadInfo](./img/app/RegistroActividadInfo.png)
+
+
+Y para finalizar, recalcar que el idioma y el modo oscuro se guardan en el sistema usando GetX Storage.
+
+### **Resultados Obtenidos y Conclusiones**
+
+Durante el desarrollo de la aplicación Pterodactyl App, se han obtenido varios resultados significativos y se han extraído conclusiones importantes:
+
+1. **Retos y Aprendizajes**
+
+   - El proceso de desarrollo se vio afectado por la falta inicial de organización y planificación, lo que resultó en múltiples reescrituras de la aplicación utilizando diferentes tecnologías.
+   - Se enfrentaron desafíos significativos debido a la documentación insuficiente de la API de Pterodactyl, especialmente en lo que respecta a los códigos de escape ANSI, lo que requirió numerosas pruebas para implementar correctamente la funcionalidad de la consola con colores.
+   - A pesar de las dificultades, el proyecto proporcionó una oportunidad invaluable para aprender y mejorar las habilidades técnicas, especialmente en el manejo de APIs complejas y la implementación de características avanzadas en Flutter.
+
+2. **Agradecimientos y Colaboraciones**
+
+   - Se reconoce y agradece enormemente el apoyo y la colaboración de ServersGame.es. Sin su asistencia, ánimos constantes y provisión de recursos como servidores para pruebas, el proyecto no habría alcanzado su realización.
+   - La interacción con ServersGame.es no solo fue crucial para el progreso del proyecto, sino que también aportó ideas valiosas y retroalimentación sobre el estado y las funcionalidades de la aplicación, basadas en las necesidades y expectativas de sus clientes.
+
+<br><br>
+
+3. **Conclusiones Finales**
+
+   - El proceso de desarrollo de Pterodactyl App fue un desafío en términos de gestión del tiempo y recursos, destacando la importancia de la planificación y la colaboración efectiva.
+   - A pesar de las dificultades encontradas, el proyecto proporcionó una experiencia enriquecedora y un crecimiento significativo en términos de habilidades técnicas y capacidad para enfrentar problemas complejos.
+   - Se espera que Pterodactyl App no solo cumpla con las expectativas de los usuarios finales, sino que también sirva como testimonio del esfuerzo y la dedicación invertidos en su desarrollo.
+
+Este proyecto ha sido una oportunidad de aprendizaje y crecimiento profesional, marcado por desafíos superados y colaboraciones fructíferas, sentando las bases para futuros desarrollos y mejoras continuas.
+
+
+
+## **Webgrafía**
+
+- [Dartactyl](https://github.com/TekExplorer/dartactyl/)
+  - Librería utilizada para interactuar con la API de Pterodactyl. A pesar de carecer de documentación detallada, ha sido crucial para la implementación del proyecto.
+
+- [Flex Color Scheme](https://pub.dev/packages/flex_color_scheme)
+  - Utilizado para personalizar el esquema de colores de la aplicación de manera visual, proporcionando flexibilidad en la apariencia de la interfaz de usuario.
+
+- [Documentación de GetX](https://github.com/jonataslaw/getx)
+  - GetX es el framework utilizado en el proyecto para la gestión del estado y la navegación. La documentación oficial ha sido una guía invaluable para utilizar sus características de manera efectiva.
+
+- [Documentación de la API de Pterodactyl](https://dashflo.net/docs/api/pterodactyl/v1/)
+  - Fuente principal de información para entender y utilizar la API de Pterodactyl en el proyecto. Aunque limitada, ha proporcionado los detalles necesarios para integrar las funcionalidades requeridas.
+
+- [Repositorio de Pterodactyl](https://github.com/pterodactyl/panel)
+  - Navegación por el código fuente del repositorio oficial de Pterodactyl, utilizado para obtener información sobre la implementación de códigos de escape ANSI y otras funcionalidades específicas.
+
+Estas fuentes han sido fundamentales para la investigación, desarrollo y personalización de la aplicación Pterodactyl App, asegurando un enfoque informado y efectivo en todas las etapas del proyecto.
+
+

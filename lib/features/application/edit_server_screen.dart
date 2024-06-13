@@ -70,7 +70,6 @@ class EditServerScreen extends StatelessWidget {
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
-                  // Update panel in database
                   panel.panelUrl = _panelController.text;
                   panel.apiKey = _apiKeyController.text;
                   panel.name = _serverIdController.text;

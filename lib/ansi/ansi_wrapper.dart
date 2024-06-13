@@ -8,7 +8,6 @@ class AnsiColorText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<TextSpan> textSpans = [];
-    String buffer = '';
     Color currentColor = Colors.grey[400]!;
 
     final ansiEscape = RegExp(r'\x1B\[\d+m');
