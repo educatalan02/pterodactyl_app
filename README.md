@@ -59,5 +59,5 @@ This project is open-source, and contributions are welcome! Feel free to submit 
 
 ## License
 
-MIT License (or specify if different).
+MIT License
 
