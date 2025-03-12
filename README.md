@@ -51,7 +51,7 @@ Pterodactyl App is a mobile application developed using **Flutter** to enable se
 
 ## Documentation
 
-For full details on features, implementation, and usage, refer to the **original documentation**: [Full Documentation](./docs/documentation.md)
+For full details on features, implementation, and usage, refer to the **original documentation**: [Full Documentation](./docs/documentacion.md)
 
 ## Contribution
 
